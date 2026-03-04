@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const redisUrl   = process.env.UPSTASH_REDIS_REST_URL;
-  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const redisUrl   = process.env.UPSTASH_REDIS_REST_URL   ?? process.env.KV_REST_API_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
   const cloudName  = process.env.CLOUDINARY_CLOUD_NAME;
   const cloudKey   = process.env.CLOUDINARY_API_KEY;
   const cloudSec   = process.env.CLOUDINARY_API_SECRET;
