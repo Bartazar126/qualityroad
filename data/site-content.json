@@ -1,0 +1,124 @@
+{
+  "gallery": [
+    {
+      "id": "1",
+      "src": "/uploads/hamm-henger.png",
+      "alt": "Hamm henger munkavégzés közben",
+      "caption": "Tömörítés modern gépparkkal"
+    },
+    {
+      "id": "2",
+      "src": "/uploads/vogele-finiszer.png",
+      "alt": "Vögele finiser aszfaltozás közben",
+      "caption": "Finisheres aszfaltozás egyenletes felülettel"
+    },
+    {
+      "id": "3",
+      "src": "/uploads/ut-maro.png",
+      "alt": "Útmarási munka kivitelezés alatt",
+      "caption": "Marás és felület előkészítés"
+    },
+    {
+      "id": "4",
+      "src": "/uploads/ut-elotte.png",
+      "alt": "Útfelület kivitelezés előtt",
+      "caption": "Kiinduló állapot felmérése"
+    },
+    {
+      "id": "5",
+      "src": "/uploads/kesz-ut.png",
+      "alt": "Elkészült aszfalt útburkolat",
+      "caption": "Átadásra kész, minőségi burkolat"
+    },
+    {
+      "id": "6",
+      "src": "/uploads/zebra-utjelzes.png",
+      "alt": "Útburkolati jelzés és felfestés",
+      "caption": "Közlekedésbiztonsági jelölések"
+    },
+    {
+      "id": "7",
+      "src": "/uploads/cat-rakodo.png",
+      "alt": "CAT rakodó földmunkán",
+      "caption": "Földmunka és terület-előkészítés"
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-airvent",
+      "name": "Airvent Zrt",
+      "location": "Telephelyi útfejlesztés",
+      "summary": "Útjavítás, aszfaltozás és teljes útburkolat szélesítés egy ütemezett ipari környezetben.",
+      "logoSrc": "/uploads/airvent.png",
+      "images": [
+        {
+          "id": "airvent-1",
+          "src": "/uploads/ut-elotte.png",
+          "alt": "Airvent telephely útburkolat előkészítése",
+          "caption": "Előkészítési fázis"
+        },
+        {
+          "id": "airvent-2",
+          "src": "/uploads/kesz-ut.png",
+          "alt": "Airvent új aszfalt burkolat",
+          "caption": "Kész burkolat átadás előtt"
+        }
+      ]
+    },
+    {
+      "id": "project-wellis",
+      "name": "Wellis Magyarország Zrt",
+      "location": "Dabas - Mánteleki út",
+      "summary": "Útalap készítés, aszfaltozás, jelölésfelfestés és bekötő út helyreállítás nagy felületen.",
+      "logoSrc": "/uploads/wellis.png",
+      "images": [
+        {
+          "id": "wellis-1",
+          "src": "/uploads/vogele-finiszer.png",
+          "alt": "Wellis finisheres aszfaltozás",
+          "caption": "Finisheres kivitelezés"
+        },
+        {
+          "id": "wellis-2",
+          "src": "/uploads/zebra-utjelzes.png",
+          "alt": "Wellis útburkolati jelzés",
+          "caption": "Végleges jelölések"
+        }
+      ]
+    },
+    {
+      "id": "project-umbroll",
+      "name": "Umbroll Kft",
+      "location": "Teljes telephely fejlesztés",
+      "summary": "Betonozás, zöldövezet kialakítás és teljes aszfaltos felületmegújítás egy projektben.",
+      "logoSrc": "/uploads/umbrolkft.png",
+      "images": [
+        {
+          "id": "umbroll-1",
+          "src": "/uploads/cat-rakodo.png",
+          "alt": "Umbroll földmunka és alapozás",
+          "caption": "Földmunka és alapozás"
+        }
+      ]
+    },
+    {
+      "id": "project-berekfurdo",
+      "name": "Berekfürdő",
+      "location": "Önkormányzati utak",
+      "summary": "Önkormányzati útszakaszok aszfaltozása és felületmegújítás tartós minőségi követelmények mellett.",
+      "logoSrc": "/uploads/berekfurdo.jpeg",
+      "images": [
+        {
+          "id": "berek-1",
+          "src": "/uploads/hamm-henger.png",
+          "alt": "Berekfürdő hengerelési munka",
+          "caption": "Tömörítés és záró munkafázis"
+        }
+      ]
+    }
+  ],
+  "googleAds": {
+    "headSnippet": "",
+    "bodySnippet": ""
+  }
+}
