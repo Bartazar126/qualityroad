@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# legacy scaffold folder (can be deleted)
+/site/
+
+# root-level uploads duplicate (real uploads live in /public/uploads/)
+/uploads/
