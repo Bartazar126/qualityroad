@@ -7,7 +7,11 @@ const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gi
 
 /* ── Cloudinary upload (production) ──────────────────────────────────── */
 
-async function uploadToCloudinary(buffer: Buffer, folder: string): Promise<string> {
+async function uploadToCloudinary(
+  buffer: Buffer,
+  mimeType: string,
+  folder: string,
+): Promise<string> {
   const { v2: cloudinary } = await import("cloudinary");
 
   cloudinary.config({
@@ -16,7 +20,7 @@ async function uploadToCloudinary(buffer: Buffer, folder: string): Promise<strin
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
 
-  const base64 = `data:image/jpeg;base64,${buffer.toString("base64")}`;
+  const base64 = `data:${mimeType};base64,${buffer.toString("base64")}`;
 
   const result = await cloudinary.uploader.upload(base64, {
     folder:          folder ? `qualityroad/${folder}` : "qualityroad",
@@ -27,23 +31,20 @@ async function uploadToCloudinary(buffer: Buffer, folder: string): Promise<strin
     fetch_format:    "auto",
   });
 
-  // Inject q_auto,f_auto,w_1920 into the URL so browsers always get
-  // an optimised version even if the Image component doesn't resize it
-  const optimisedUrl = result.secure_url.replace(
-    "/upload/",
-    "/upload/q_auto,f_auto,w_1920/",
-  );
-
-  return optimisedUrl;
+  return result.secure_url.replace("/upload/", "/upload/q_auto,f_auto,w_1920/");
 }
 
 /* ── Filesystem upload (development) ─────────────────────────────────── */
 
-async function uploadToFilesystem(buffer: Buffer, folder: string, extension: string): Promise<string> {
+async function uploadToFilesystem(
+  buffer: Buffer,
+  folder: string,
+  extension: string,
+): Promise<string> {
   const { promises: fs } = await import("node:fs");
   const path = await import("node:path");
 
-  const filename  = `${Date.now()}-${randomUUID()}.${extension}`;
+  const filename    = `${Date.now()}-${randomUUID()}.${extension}`;
   const uploadsBase = path.join(process.cwd(), "public", "uploads");
   const targetDir   = folder ? path.join(uploadsBase, folder) : uploadsBase;
 
@@ -58,32 +59,41 @@ async function uploadToFilesystem(buffer: Buffer, folder: string, extension: str
 /* ── Route handler ────────────────────────────────────────────────────── */
 
 export async function POST(request: Request) {
-  const url    = new URL(request.url);
-  const folder = url.searchParams.get("folder") ?? "";
+  try {
+    const url    = new URL(request.url);
+    const folder = url.searchParams.get("folder") ?? "";
 
-  const formData = await request.formData();
-  const file     = formData.get("file");
+    const formData = await request.formData();
+    const file     = formData.get("file");
 
-  if (!(file instanceof File)) {
-    return NextResponse.json({ error: "Nincs fájl csatolva." }, { status: 400 });
+    if (!(file instanceof File)) {
+      return NextResponse.json({ error: "Nincs fájl csatolva." }, { status: 400 });
+    }
+
+    if (!allowedTypes.has(file.type)) {
+      return NextResponse.json(
+        { error: "Csak JPG, PNG, WEBP vagy GIF képet tölts fel." },
+        { status: 400 },
+      );
+    }
+
+    const bytes     = await file.arrayBuffer();
+    const buffer    = Buffer.from(bytes);
+    const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
+
+    const useCloudinary =
+      process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY    &&
+      process.env.CLOUDINARY_API_SECRET;
+
+    const src = useCloudinary
+      ? await uploadToCloudinary(buffer, file.type, folder)
+      : await uploadToFilesystem(buffer, folder, extension);
+
+    return NextResponse.json({ src });
+  } catch (err) {
+    console.error("[POST /api/upload]", err);
+    const message = err instanceof Error ? err.message : "Ismeretlen hiba";
+    return NextResponse.json({ error: `Feltöltési hiba: ${message}` }, { status: 500 });
   }
-
-  if (!allowedTypes.has(file.type)) {
-    return NextResponse.json({ error: "Csak JPG, PNG, WEBP vagy GIF képet tölts fel." }, { status: 400 });
-  }
-
-  const bytes     = await file.arrayBuffer();
-  const buffer    = Buffer.from(bytes);
-  const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
-
-  const useCloudinary =
-    process.env.CLOUDINARY_CLOUD_NAME &&
-    process.env.CLOUDINARY_API_KEY    &&
-    process.env.CLOUDINARY_API_SECRET;
-
-  const src = useCloudinary
-    ? await uploadToCloudinary(buffer, folder)
-    : await uploadToFilesystem(buffer, folder, extension);
-
-  return NextResponse.json({ src });
 }

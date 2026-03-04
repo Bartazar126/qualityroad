@@ -20,6 +20,7 @@ export function DropZone({
   const [dragging, setDragging] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const uploadFiles = async (files: File[]) => {
@@ -27,15 +28,25 @@ export function DropZone({
     if (imageFiles.length === 0) return;
 
     setUploading(true);
+    setError(null);
     const srcs: string[] = [];
 
     for (let i = 0; i < imageFiles.length; i++) {
-      const fd = new FormData();
-      fd.append("file", imageFiles[i]);
-      const url = `/api/upload${folder ? `?folder=${encodeURIComponent(folder)}` : ""}`;
-      const res = await fetch(url, { method: "POST", body: fd });
-      const data = (await res.json()) as { src?: string };
-      if (data.src) srcs.push(data.src);
+      try {
+        const fd = new FormData();
+        fd.append("file", imageFiles[i]);
+        const url = `/api/upload${folder ? `?folder=${encodeURIComponent(folder)}` : ""}`;
+        const res = await fetch(url, { method: "POST", body: fd });
+        const data = (await res.json()) as { src?: string; error?: string };
+        if (data.src) {
+          srcs.push(data.src);
+        } else {
+          setError(data.error ?? "Ismeretlen feltöltési hiba");
+        }
+      } catch (e) {
+        console.error("upload error", e);
+        setError("Hálózati hiba a feltöltéskor");
+      }
       setProgress(Math.round(((i + 1) / imageFiles.length) * 100));
     }
 
@@ -90,6 +101,11 @@ export function DropZone({
               style={{ width: `${progress}%` }}
             />
           </div>
+        </div>
+      ) : error ? (
+        <div className="w-full text-center">
+          <p className="text-sm font-bold text-red-400">⚠ {error}</p>
+          <p className="mt-1 text-xs text-slate-500">Kattints az újrapróbáláshoz</p>
         </div>
       ) : (
         <>
