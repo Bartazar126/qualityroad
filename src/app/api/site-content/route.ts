@@ -5,59 +5,45 @@ import { SiteContent } from "@/types/site-content";
 export const dynamic = "force-dynamic";
 
 function isValidPayload(payload: unknown): payload is SiteContent {
-  if (!payload || typeof payload !== "object") {
-    return false;
-  }
-
-  const candidate = payload as SiteContent;
-  const hasValidGallery =
-    Array.isArray(candidate.gallery) &&
-    candidate.gallery.every(
-      (item) =>
-        typeof item.id === "string" &&
-        typeof item.src === "string" &&
-        typeof item.alt === "string" &&
-        typeof item.caption === "string",
-    );
-
-  const hasValidProjects =
-    Array.isArray(candidate.projects) &&
-    candidate.projects.every(
-      (project) =>
-        typeof project.id === "string" &&
-        typeof project.name === "string" &&
-        typeof project.location === "string" &&
-        typeof project.summary === "string" &&
-        typeof project.logoSrc === "string" &&
-        Array.isArray(project.images) &&
-        project.images.every(
-          (image) =>
-            typeof image.id === "string" &&
-            typeof image.src === "string" &&
-            typeof image.alt === "string" &&
-            typeof image.caption === "string",
-        ),
-    );
-
-  const hasValidAds =
-    typeof candidate.googleAds?.headSnippet === "string" &&
-    typeof candidate.googleAds?.bodySnippet === "string";
-
-  return hasValidGallery && hasValidProjects && hasValidAds;
+  if (!payload || typeof payload !== "object") return false;
+  const c = payload as Record<string, unknown>;
+  return Array.isArray(c.gallery) && Array.isArray(c.projects);
 }
 
 export async function GET() {
-  const content = await readSiteContent();
-  return NextResponse.json(content);
+  try {
+    const content = await readSiteContent();
+    return NextResponse.json(content);
+  } catch (err) {
+    console.error("[GET /api/site-content]", err);
+    return NextResponse.json({ error: "Olvasási hiba." }, { status: 500 });
+  }
 }
 
 export async function PUT(request: Request) {
-  const body: unknown = await request.json();
+  try {
+    const body: unknown = await request.json();
 
-  if (!isValidPayload(body)) {
-    return NextResponse.json({ error: "Érvénytelen adatszerkezet." }, { status: 400 });
+    if (!isValidPayload(body)) {
+      return NextResponse.json({ error: "Érvénytelen adatszerkezet." }, { status: 400 });
+    }
+
+    // Ensure all optional fields exist with defaults before saving
+    const safe: SiteContent = {
+      gallery:        Array.isArray(body.gallery)        ? body.gallery        : [],
+      projects:       Array.isArray(body.projects)       ? body.projects       : [],
+      hiddenImages:   Array.isArray(body.hiddenImages)   ? body.hiddenImages   : [],
+      hiddenProjects: Array.isArray(body.hiddenProjects) ? body.hiddenProjects : [],
+      googleAds: {
+        headSnippet: typeof body.googleAds?.headSnippet === "string" ? body.googleAds.headSnippet : "",
+        bodySnippet: typeof body.googleAds?.bodySnippet === "string" ? body.googleAds.bodySnippet : "",
+      },
+    };
+
+    await writeSiteContent(safe);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("[PUT /api/site-content]", err);
+    return NextResponse.json({ error: "Mentési hiba a szerveren." }, { status: 500 });
   }
-
-  await writeSiteContent(body);
-  return NextResponse.json({ ok: true });
 }
