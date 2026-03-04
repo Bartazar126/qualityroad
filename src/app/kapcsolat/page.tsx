@@ -84,25 +84,20 @@ export default function KapcsolatPage() {
               <p className="text-[10px] font-extrabold tracking-[0.25em] text-orange-500 uppercase">
                 Cégadatok
               </p>
-              <p className="mt-3 text-lg font-black text-slate-900">{contactData.companyName}</p>
-              <div className="mt-4 space-y-2 text-sm text-slate-600">
-                <div className="flex items-start gap-3">
-                  <span className="mt-[3px] h-2 w-2 shrink-0 rounded-full bg-orange-500" />
-                  <p>Útépítés, aszfaltozás, burkolatjavítás</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="mt-[3px] h-2 w-2 shrink-0 rounded-full bg-orange-500" />
-                  <p>Alapítva: 2017 — 15+ év szakmai tapasztalat</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="mt-[3px] h-2 w-2 shrink-0 rounded-full bg-orange-500" />
-                  <p>
-                    E-mail:{" "}
-                    <span className="italic text-slate-400">
-                      hamarosan elérhető
-                    </span>
-                  </p>
-                </div>
+              <p className="mt-3 text-base font-black text-slate-900">{contactData.companyNameFull}</p>
+              <div className="mt-4 divide-y divide-slate-100">
+                {[
+                  { label: "Rövidített név",    value: contactData.companyName },
+                  { label: "Alapítás éve",       value: contactData.foundedYear },
+                  { label: "Adószám",            value: contactData.taxNumber },
+                  { label: "Főtevékenység",      value: contactData.mainActivity },
+                  { label: "Székhely",           value: contactData.address },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex flex-wrap justify-between gap-2 py-2.5 text-sm">
+                    <span className="font-semibold text-slate-500">{label}</span>
+                    <span className="text-right text-slate-800">{value}</span>
+                  </div>
+                ))}
               </div>
             </div>
 

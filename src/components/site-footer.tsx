@@ -28,7 +28,7 @@ export function SiteFooter() {
               &quot;Az út amely a jövőbe vezet a közös sikereinkért&quot;
             </p>
             <p className="mt-3 text-xs text-slate-600 tracking-wider">
-              QUALITY ROAD INTACT KFT · Alapítva 2017
+              QUALITY ROAD INTACT KFT · Alapítva {contactData.foundedYear}
             </p>
           </div>
 

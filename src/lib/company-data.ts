@@ -1,5 +1,5 @@
 export const introParagraphs = [
-  "Cégünk, a QUALITY ROAD INTACT KFT 2017.07.17-én alapított vállalkozás, szakmai tapasztalatunk azonban közel 15 éves múltra tekint vissza.",
+  "Cégünk, a QUALITY ROAD INTACT KFT 2018-ban alapított vállalkozás, szakmai tapasztalatunk azonban közel 15 éves múltra tekint vissza.",
   "Fő profilunk út- és autópálya építés. Szolgáltatásaink közé tartozik az útfelújítás, kerékpárút építés, közműépítés utáni út-helyreállítás, valamint az útépítéshez kapcsolódó földmunka, aszfaltozás, szegélyépítés és parkosítás.",
   "Elsődleges célunk ügyfeleink magas szintű kiszolgálása. Üzleti szemléletünk fókuszában a kiváló minőségre törekvés és a precizitás áll.",
   "A kifogástalan minőség biztosításával kívánjuk elnyerni és megtartani jelenlegi és leendő ügyfeleink bizalmát. Munkáink során a megbízhatóságra és korrekt partnerségre törekszünk, amely a hosszú távú együttműködés alapja.",
@@ -102,6 +102,11 @@ export const folderProjects = [
 
 export const contactData = {
   companyName: "QUALITY ROAD INTACT KFT",
+  companyNameFull: "Quality Road Intact Korlátolt Felelősségű Társaság",
+  foundedYear: "2018",
+  taxNumber: "26387275-2-13",
+  mainActivity: "4211 — Út, autópálya építése",
+  address: "2161 Csomád, Kossuth Lajos út 79.",
   /** kept for backwards-compat with existing single-contact displays */
   contactPerson: "Molnár Norbert ügyvezető",
   phone: "+36 70 434 0766",

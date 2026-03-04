@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 const stats = [
   { value: "15+",  label: "év szakmai tapasztalat" },
-  { value: "2017", label: "alapítva" },
+  { value: "2018", label: "alapítva" },
   { value: "100%", label: "minőségfókusz" },
 ];
 
