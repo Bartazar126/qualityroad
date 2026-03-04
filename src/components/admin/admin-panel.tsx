@@ -92,19 +92,44 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
       method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(next),
     });
     setSaving(false);
-    if (res.ok) { setContent(next); notify("Projekt elmentve ✓"); }
-    else        { notify("Mentési hiba!", false); }
+    if (res.ok) {
+      setContent(next);
+      notify("Projekt elmentve ✓");
+      router.refresh();
+    } else {
+      const err = await res.json().catch(() => ({}));
+      console.error("save failed", res.status, err);
+      notify(`Mentési hiba! (${res.status})`, false);
+    }
   };
 
   const deleteRegular = async () => {
     if (!content || !draft) return;
     if (!confirm(`Biztosan törlöd: "${draft.name}"?`)) return;
+    setSaving(true);
     const projects = content.projects.filter((p) => p.id !== draft.id);
     const next     = { ...content, projects };
-    const res      = await fetch("/api/site-content", {
-      method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(next),
-    });
-    if (res.ok) { setContent(next); setDraft(null); setActive(null); notify("Projekt törölve."); }
+    try {
+      const res = await fetch("/api/site-content", {
+        method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(next),
+      });
+      if (res.ok) {
+        setContent(next);
+        setDraft(null);
+        setActive(null);
+        notify("Projekt törölve.");
+        router.refresh();
+      } else {
+        const err = await res.json().catch(() => ({}));
+        console.error("delete failed", res.status, err);
+        notify(`Törlési hiba! (${res.status})`, false);
+      }
+    } catch (e) {
+      console.error("delete error", e);
+      notify("Hálózati hiba a törléskor!", false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   /* ── folder project: hide/show from site ──────────── */
@@ -121,6 +146,11 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
     if (res.ok) {
       setContent(next);
       notify(isHidden ? "Projekt visszaállítva ✓" : "Projekt elrejtve az oldalról");
+      router.refresh();
+    } else {
+      const err = await res.json().catch(() => ({}));
+      console.error("toggle hide project failed", res.status, err);
+      notify(`Hiba! (${res.status})`, false);
     }
   };
 
@@ -135,8 +165,14 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
     const res  = await fetch("/api/site-content", {
       method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(next),
     });
-    if (res.ok) { setContent(next); notify(hiddenImages.includes(src) ? "Kép elrejtve" : "Kép visszaállítva ✓"); }
-    else        { notify("Hiba!", false); }
+    if (res.ok) {
+      setContent(next);
+      notify(hiddenImages.includes(src) ? "Kép elrejtve" : "Kép visszaállítva ✓");
+    } else {
+      const err = await res.json().catch(() => ({}));
+      console.error("hide image failed", res.status, err);
+      notify(`Hiba! (${res.status})`, false);
+    }
   };
 
   /* ── regular image handlers ───────────────────────── */
