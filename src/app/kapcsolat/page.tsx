@@ -52,27 +52,43 @@ export default function KapcsolatPage() {
                   </p>
                   <p className="mt-0.5 text-xl font-black text-slate-900">{person.name}</p>
                   <a
-                    href={`tel:${contactData.phone}`}
-                    className="mt-1 block text-sm font-semibold text-slate-500 transition hover:text-orange-600"
+                    href={`tel:${person.phone}`}
+                    className="mt-1 block text-lg font-bold text-slate-700 transition hover:text-orange-600"
                   >
-                    {contactData.phoneDisplay}
+                    {person.phoneDisplay}
                   </a>
                 </div>
               </div>
             ))}
 
-            {/* phone CTA */}
-            <div className="bg-orange-500 p-6">
+            {/* phone + email CTA */}
+            <div className="bg-orange-500 p-6 space-y-3">
               <p className="text-[10px] font-extrabold tracking-[0.25em] text-white/70 uppercase">
                 Hívjon most
               </p>
-              <a
-                href={`tel:${contactData.phone}`}
-                className="mt-2 block text-4xl font-black text-white transition hover:text-orange-100"
-              >
-                {contactData.phoneDisplay}
-              </a>
-              <p className="mt-2 text-sm text-white/80">
+              {contactData.contacts.map((person) => (
+                <div key={person.name}>
+                  <p className="text-[10px] font-bold text-white/60">{person.name}</p>
+                  <a
+                    href={`tel:${person.phone}`}
+                    className="block text-2xl font-black text-white transition hover:text-orange-100"
+                  >
+                    {person.phoneDisplay}
+                  </a>
+                </div>
+              ))}
+              <div className="pt-1 border-t border-white/20">
+                <p className="text-[10px] font-extrabold tracking-[0.25em] text-white/70 uppercase mb-1">
+                  E-mail
+                </p>
+                <a
+                  href={`mailto:${contactData.email}`}
+                  className="block text-sm font-bold text-white transition hover:text-orange-100"
+                >
+                  {contactData.email}
+                </a>
+              </div>
+              <p className="text-sm text-white/80 pt-1">
                 Hétköznapokon személyesen is elérhető munkatársaink.
               </p>
             </div>
@@ -87,15 +103,20 @@ export default function KapcsolatPage() {
               <p className="mt-3 text-base font-black text-slate-900">{contactData.companyNameFull}</p>
               <div className="mt-4 divide-y divide-slate-100">
                 {[
-                  { label: "Rövidített név",    value: contactData.companyName },
-                  { label: "Alapítás éve",       value: contactData.foundedYear },
-                  { label: "Adószám",            value: contactData.taxNumber },
-                  { label: "Főtevékenység",      value: contactData.mainActivity },
-                  { label: "Székhely",           value: contactData.address },
+                  { label: "Rövidített név",  value: contactData.companyName },
+                  { label: "Alapítás éve",     value: contactData.foundedYear },
+                  { label: "Adószám",          value: contactData.taxNumber },
+                  { label: "Főtevékenység",    value: contactData.mainActivity },
+                  { label: "Székhely",         value: contactData.address },
+                  { label: "E-mail",           value: contactData.email },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex flex-wrap justify-between gap-2 py-2.5 text-sm">
                     <span className="font-semibold text-slate-500">{label}</span>
-                    <span className="text-right text-slate-800">{value}</span>
+                    {label === "E-mail" ? (
+                      <a href={`mailto:${value}`} className="text-right text-orange-600 hover:text-orange-800 transition">{value}</a>
+                    ) : (
+                      <span className="text-right text-slate-800">{value}</span>
+                    )}
                   </div>
                 ))}
               </div>

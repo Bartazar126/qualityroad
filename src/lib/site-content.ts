@@ -11,6 +11,8 @@ const defaultContent: SiteContent = {
     headSnippet: "",
     bodySnippet: "",
   },
+  hiddenImages: [],
+  hiddenProjects: [],
 };
 
 export async function readSiteContent(): Promise<SiteContent> {
@@ -25,6 +27,8 @@ export async function readSiteContent(): Promise<SiteContent> {
         headSnippet: parsed.googleAds?.headSnippet ?? "",
         bodySnippet: parsed.googleAds?.bodySnippet ?? "",
       },
+      hiddenImages: Array.isArray(parsed.hiddenImages) ? parsed.hiddenImages : [],
+      hiddenProjects: Array.isArray(parsed.hiddenProjects) ? parsed.hiddenProjects : [],
     };
   } catch {
     return defaultContent;

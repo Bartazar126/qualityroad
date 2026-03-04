@@ -11,6 +11,7 @@ export type ProjectReference = {
   location: string;
   summary: string;
   logoSrc: string;
+  tags: string[];
   images: GalleryItem[];
 };
 
@@ -23,4 +24,6 @@ export type SiteContent = {
   gallery: GalleryItem[];
   projects: ProjectReference[];
   googleAds: GoogleAdsConfig;
+  hiddenImages: string[];
+  hiddenProjects: string[];
 };

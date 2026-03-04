@@ -16,7 +16,6 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [logoErr, setLogoErr] = useState(false);
 
   return (
     <>
@@ -30,27 +29,27 @@ export function SiteHeader() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-3 py-3"
+            className="flex items-center gap-3 py-2"
             onClick={() => setOpen(false)}
           >
-            {logoErr ? (
-              <>
-                <span className="block h-7 w-[3px] bg-orange-500" aria-hidden="true" />
-                <span className="text-sm font-extrabold tracking-[0.18em] text-white uppercase">
-                  Quality Road <span className="text-orange-400">Intact</span>
-                </span>
-              </>
-            ) : (
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md bg-white shadow-md overflow-hidden">
               <Image
                 src="/logo.png"
-                alt="Quality Road Intact Kft"
+                alt="Quality Road Intact Kft logó"
                 width={160}
-                height={40}
-                className="h-9 w-auto object-contain"
+                height={160}
+                className="h-full w-full object-contain object-center"
                 priority
-                onError={() => setLogoErr(true)}
               />
-            )}
+            </div>
+            <span className="flex flex-col leading-none" aria-label="Quality Road Intact Kft">
+              <span className="text-[14px] font-black tracking-[0.22em] text-white uppercase">
+                Quality Road
+              </span>
+              <span className="text-[10px] font-bold tracking-[0.35em] text-orange-400 uppercase mt-[3px]">
+                Intact Kft
+              </span>
+            </span>
           </Link>
 
           {/* Desktop nav */}

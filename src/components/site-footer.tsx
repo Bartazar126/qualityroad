@@ -1,29 +1,28 @@
 import Link from "next/link";
 import Image from "next/image";
 import { contactData } from "@/lib/company-data";
-import { existsSync } from "node:fs";
-import path from "node:path";
 
 function FooterLogo() {
-  const hasLogo = existsSync(path.join(process.cwd(), "public", "logo.png"));
-  if (hasLogo) {
-    return (
-      <Image
-        src="/logo.png"
-        alt="Quality Road Intact Kft"
-        width={160}
-        height={44}
-        className="h-10 w-auto object-contain"
-      />
-    );
-  }
   return (
-    <>
-      <span className="block h-8 w-[3px] bg-orange-500" />
-      <span className="text-sm font-extrabold tracking-[0.18em] uppercase">
-        Quality Road <span className="text-orange-400">Intact Kft</span>
+    <div className="flex items-center gap-3">
+      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded bg-white p-1.5 shadow-lg">
+        <Image
+          src="/logo.png"
+          alt="Quality Road Intact Kft logó"
+          width={120}
+          height={120}
+          className="h-full w-full object-contain"
+        />
+      </div>
+      <span className="flex flex-col leading-none">
+        <span className="text-[14px] font-black tracking-[0.22em] text-white uppercase">
+          Quality Road
+        </span>
+        <span className="text-[10px] font-bold tracking-[0.35em] text-orange-400 uppercase mt-[3px]">
+          Intact Kft
+        </span>
       </span>
-    </>
+    </div>
   );
 }
 
@@ -84,16 +83,24 @@ export function SiteFooter() {
             </p>
             <div className="mt-5 space-y-3">
               {contactData.contacts.map((person) => (
-                <p key={person.name} className="text-sm text-slate-300">
-                  <span className="font-bold">{person.name}</span>
-                  <span className="ml-2 text-slate-500">— {person.role}</span>
-                </p>
+                <div key={person.name}>
+                  <p className="text-xs text-slate-500">
+                    <span className="font-bold text-slate-300">{person.name}</span>
+                    <span className="ml-1">— {person.role}</span>
+                  </p>
+                  <a
+                    href={`tel:${person.phone}`}
+                    className="text-lg font-black text-white transition hover:text-orange-400"
+                  >
+                    {person.phoneDisplay}
+                  </a>
+                </div>
               ))}
               <a
-                href={`tel:${contactData.phone}`}
-                className="block text-2xl font-black text-white transition hover:text-orange-400"
+                href={`mailto:${contactData.email}`}
+                className="block text-sm font-semibold text-orange-400 transition hover:text-orange-300"
               >
-                {contactData.phoneDisplay}
+                {contactData.email}
               </a>
               <p className="text-xs text-slate-600">Hétköznapokon elérhető</p>
             </div>

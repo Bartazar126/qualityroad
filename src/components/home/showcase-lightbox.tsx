@@ -6,9 +6,10 @@ import { GalleryItem } from "@/types/site-content";
 
 type ShowcaseLightboxProps = {
   images: GalleryItem[];
+  hideCaptions?: boolean;
 };
 
-export function ShowcaseLightbox({ images }: ShowcaseLightboxProps) {
+export function ShowcaseLightbox({ images, hideCaptions = false }: ShowcaseLightboxProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const activeItem = useMemo(
@@ -63,7 +64,8 @@ export function ShowcaseLightbox({ images }: ShowcaseLightboxProps) {
                 alt={item.alt || item.caption}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                loading="lazy"
+                loading={index < 6 ? "eager" : "lazy"}
+                priority={index < 3}
                 className="object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
@@ -73,20 +75,26 @@ export function ShowcaseLightbox({ images }: ShowcaseLightboxProps) {
             </div>
 
             {/* default caption */}
-            <figcaption className="absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 group-hover:opacity-0">
-              <p className="text-[10px] font-extrabold tracking-[0.2em] text-white/70 uppercase">
-                {item.caption || "Referencia kivitelezés"}
-              </p>
-            </figcaption>
+            {!hideCaptions && (
+              <figcaption className="absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 group-hover:opacity-0">
+                <p className="text-[10px] font-extrabold tracking-[0.2em] text-white/70 uppercase">
+                  {item.caption || "Referencia kivitelezés"}
+                </p>
+              </figcaption>
+            )}
 
             {/* hover overlay */}
-            <div className="absolute inset-0 flex flex-col items-start justify-end p-4 opacity-0 translate-y-2 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-              <p className="text-[10px] font-extrabold tracking-[0.25em] text-orange-400 uppercase">
-                Megtekintés
-              </p>
-              <p className="mt-0.5 text-sm font-semibold text-white">
-                {item.caption || "Referencia kivitelezés"}
-              </p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-2 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+              <div className="bg-black/40 px-4 py-2 backdrop-blur-sm">
+                <p className="text-[11px] font-extrabold tracking-[0.3em] text-white uppercase">
+                  Megtekintés
+                </p>
+              </div>
+              {!hideCaptions && (
+                <p className="mt-2 text-sm font-semibold text-white drop-shadow">
+                  {item.caption || "Referencia kivitelezés"}
+                </p>
+              )}
             </div>
           </button>
         ))}

@@ -107,12 +107,13 @@ export const contactData = {
   taxNumber: "26387275-2-13",
   mainActivity: "4211 — Út, autópálya építése",
   address: "2161 Csomád, Kossuth Lajos út 79.",
+  email: "qualityroadkft@gmail.com",
   /** kept for backwards-compat with existing single-contact displays */
   contactPerson: "Molnár Norbert ügyvezető",
-  phone: "+36 70 434 0766",
+  phone: "+36704340766",
   phoneDisplay: "06/70-434-07-66",
   contacts: [
-    { name: "Molnár Norbert", role: "Ügyvezető" },
-    { name: "Botos Lajos",    role: "Kapcsolattartó" },
+    { name: "Molnár Norbert", role: "Ügyvezető",       phone: "+36704340766", phoneDisplay: "06/70-434-07-66" },
+    { name: "Botos Lajos",    role: "Kapcsolattartó",   phone: "+36306906086", phoneDisplay: "06/30-690-60-86" },
   ],
 };

@@ -16,7 +16,6 @@ export default async function AdminPage() {
     redirect("/admin/login");
   }
 
-  // Enrich each folder-based project with its current images
   const folderProjectsData = folderProjects.map((p) => ({
     id:      p.id,
     name:    p.name,

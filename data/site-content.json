@@ -115,10 +115,27 @@
           "caption": "Tömörítés és záró munkafázis"
         }
       ]
+    },
+    {
+      "id": "669fd5c3-ebf6-4f85-b86f-790e82c2f92f",
+      "name": "Teszt",
+      "location": "Budapest Na",
+      "summary": "2200 terület",
+      "logoSrc": "/uploads/project-logos/1772642076256-725ca524-ae9d-4dbb-974a-08dcf0e63b07.jpeg",
+      "images": [
+        {
+          "id": "afe1b5c1-d599-410a-934b-15aadd810a62",
+          "src": "/uploads/project-669fd5c3-ebf6-4f85-b86f-790e82c2f92f/1772642077823-39e0f129-0058-4b3d-8318-a45d868372ca.jpeg",
+          "alt": "",
+          "caption": ""
+        }
+      ]
     }
   ],
   "googleAds": {
     "headSnippet": "",
     "bodySnippet": ""
-  }
+  },
+  "hiddenImages": [],
+  "adminFolderProjects": []
 }
