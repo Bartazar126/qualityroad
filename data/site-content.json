@@ -132,10 +132,27 @@
       ]
     }
   ],
+  "hiddenImages": [
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2261.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2299.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2309.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2331.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2332.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2338.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2349.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2353.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2357.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2359.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2361.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2368.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2379.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2385.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2386.jpeg",
+    "/uploads/BMW%20Beruh%C3%A1z%C3%A1s/IMG_2499.jpeg"
+  ],
+  "hiddenProjects": [],
   "googleAds": {
     "headSnippet": "",
     "bodySnippet": ""
-  },
-  "hiddenImages": [],
-  "adminFolderProjects": []
+  }
 }
