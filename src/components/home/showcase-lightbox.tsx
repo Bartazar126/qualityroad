@@ -4,18 +4,17 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { GalleryItem } from "@/types/site-content";
 
-type ShowcaseLightboxProps = {
+type Props = {
   images: GalleryItem[];
   hideCaptions?: boolean;
 };
 
-export function ShowcaseLightbox({ images, hideCaptions = false }: ShowcaseLightboxProps) {
+export function ShowcaseLightbox({ images, hideCaptions = false }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded]           = useState(false);
 
-  const activeItem = activeIndex !== null ? images[activeIndex] : null;
-  const prevItem   = activeIndex !== null ? images[(activeIndex - 1 + images.length) % images.length] : null;
-  const nextItem   = activeIndex !== null ? images[(activeIndex + 1) % images.length] : null;
+  const isOpen     = activeIndex !== null;
+  const activeItem = isOpen ? images[activeIndex] : null;
 
   const close    = useCallback(() => setActiveIndex(null), []);
   const showPrev = useCallback(() => {
@@ -27,134 +26,114 @@ export function ShowcaseLightbox({ images, hideCaptions = false }: ShowcaseLight
     setActiveIndex((i) => (i === null ? null : (i + 1) % images.length));
   }, [images.length]);
 
-  const openAt = (index: number) => { setLoaded(false); setActiveIndex(index); };
+  const open = (i: number) => { setLoaded(false); setActiveIndex(i); };
 
+  /* keyboard */
   useEffect(() => {
-    if (activeIndex === null) return;
+    if (!isOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
+    const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape")       close();
-      else if (e.key === "ArrowLeft")  showPrev();
-      else if (e.key === "ArrowRight") showNext();
+      if (e.key === "ArrowLeft")    showPrev();
+      if (e.key === "ArrowRight")   showNext();
     };
-    window.addEventListener("keydown", onKey);
-    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
-  }, [activeIndex, close, showPrev, showNext]);
+    window.addEventListener("keydown", handler);
+    return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", handler); };
+  }, [isOpen, close, showPrev, showNext]);
 
   return (
     <>
-      {/* ── Grid ─────────────────────────────────────── */}
+      {/* ── Grid ── */}
       <div className="grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-        {images.map((item, index) => (
-          <button key={item.id} type="button" onClick={() => openAt(index)}
-            className="group relative overflow-hidden bg-slate-900 text-left">
-            <div className="relative aspect-5/4 bg-slate-800">
+        {images.map((item, i) => (
+          <button key={item.id} type="button" onClick={() => open(i)}
+            className="group relative overflow-hidden bg-slate-800 text-left">
+            <div className="relative aspect-5/4">
               <Image
                 src={item.src}
                 alt={item.alt || item.caption}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                loading={index < 6 ? "eager" : "lazy"}
-                priority={index < 3}
-                className="object-cover opacity-80 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100"
+                loading={i < 6 ? "eager" : "lazy"}
+                priority={i < 3}
+                className="object-cover opacity-90 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
               />
-              <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent" />
-              <div className="absolute left-0 top-0 h-[3px] w-0 bg-orange-500 transition-all duration-500 group-hover:w-full" />
-            </div>
-
-            {!hideCaptions && (
-              <figcaption className="absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 group-hover:opacity-0">
-                <p className="text-[10px] font-extrabold tracking-[0.2em] text-white/70 uppercase">
-                  {item.caption || "Referencia kivitelezés"}
-                </p>
-              </figcaption>
-            )}
-
-            <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 translate-y-2 transition duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-              <div className="bg-black/40 px-4 py-2 backdrop-blur-sm">
-                <p className="text-[11px] font-extrabold tracking-[0.3em] text-white uppercase">Megtekintés</p>
+              {/* hover overlay */}
+              <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition duration-300 group-hover:bg-black/30">
+                <span className="scale-75 rounded-full bg-white/20 px-4 py-1.5 text-[11px] font-extrabold tracking-[0.25em] text-white opacity-0 backdrop-blur-sm transition duration-300 group-hover:scale-100 group-hover:opacity-100 uppercase">
+                  Megtekintés
+                </span>
               </div>
+              {!hideCaptions && (
+                <p className="absolute bottom-2 left-3 text-[10px] font-bold tracking-widest text-white/60 uppercase group-hover:opacity-0 transition">
+                  {item.caption || ""}
+                </p>
+              )}
             </div>
           </button>
         ))}
       </div>
 
-      {/* ── Lightbox ─────────────────────────────────── */}
-      {activeItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-3 sm:p-6"
-          onClick={close}>
+      {/* ── Lightbox ── */}
+      {isOpen && activeItem && (
+        <div className="fixed inset-0 z-50 bg-black/95" onClick={close}>
 
-          {/* Preload prev + next so they're ready instantly */}
-          {prevItem && <link rel="preload" as="image" href={prevItem.src} />}
-          {nextItem && <link rel="preload" as="image" href={nextItem.src} />}
+          {/* Preload adjacent */}
+          {activeIndex !== null && images[(activeIndex + 1) % images.length] && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={images[(activeIndex + 1) % images.length].src} alt="" className="hidden" aria-hidden />
+          )}
 
-          {/* Close */}
-          <button type="button" aria-label="Bezárás" onClick={close}
-            className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center border border-slate-700 bg-slate-900 text-slate-400 transition hover:border-orange-500 hover:text-orange-400">
-            ✕
-          </button>
-
-          {/* Prev */}
-          <button type="button" aria-label="Előző" onClick={(e) => { e.stopPropagation(); showPrev(); }}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex h-14 w-14 items-center justify-center border border-slate-700 bg-slate-900/80 text-3xl text-white transition hover:border-orange-500 hover:bg-slate-800 sm:left-5 select-none">
-            ‹
-          </button>
-
-          {/* Main panel */}
-          <div className="w-full max-w-5xl border border-slate-800 bg-slate-950 p-3 shadow-2xl"
+          {/* Top bar */}
+          <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 sm:px-6"
             onClick={(e) => e.stopPropagation()}>
+            <span className="text-sm font-bold text-white/50">
+              {activeIndex + 1} / {images.length}
+            </span>
+            <button type="button" onClick={close} aria-label="Bezárás"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 text-xl">
+              ✕
+            </button>
+          </div>
 
-            {/* counter */}
-            <div className="mb-3 flex items-center justify-between">
-              {!hideCaptions && (
-                <p className="text-[10px] font-extrabold tracking-[0.25em] text-orange-400 uppercase">
-                  {activeItem.caption || "Referencia kivitelezés"}
-                </p>
-              )}
-              <p className="ml-auto text-[11px] font-bold text-slate-500">
-                {(activeIndex ?? 0) + 1}&nbsp;/&nbsp;{images.length}
-              </p>
-            </div>
-
-            {/* main image with fade */}
-            <div className="relative aspect-video bg-slate-900">
-              {/* loading shimmer */}
+          {/* Image area — full screen */}
+          <div className="flex h-full w-full items-center justify-center px-16 sm:px-24"
+            onClick={(e) => e.stopPropagation()}>
+            <div className="relative w-full max-w-4xl" style={{ maxHeight: "calc(100dvh - 80px)" }}>
               {!loaded && (
-                <div className="absolute inset-0 animate-pulse bg-slate-800" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                </div>
               )}
               <Image
                 key={activeItem.src}
                 src={activeItem.src}
                 alt={activeItem.alt || activeItem.caption}
-                fill
-                sizes="(max-width: 768px) 100vw, 80vw"
+                width={1200}
+                height={800}
                 priority
                 onLoad={() => setLoaded(true)}
-                className={["object-contain transition-opacity duration-300", loaded ? "opacity-100" : "opacity-0"].join(" ")}
+                className={[
+                  "mx-auto max-h-[calc(100dvh-80px)] w-auto rounded object-contain transition-opacity duration-300",
+                  loaded ? "opacity-100" : "opacity-0",
+                ].join(" ")}
               />
-            </div>
-
-            {/* thumbnails */}
-            <div className="mt-2 grid grid-cols-8 gap-1 sm:grid-cols-10">
-              {images.map((item, index) => (
-                <button key={item.id} type="button" onClick={() => openAt(index)}
-                  className={["relative aspect-square overflow-hidden transition-all duration-150",
-                    index === activeIndex
-                      ? "ring-2 ring-orange-500 ring-offset-1 ring-offset-slate-950 opacity-100"
-                      : "opacity-35 hover:opacity-80",
-                  ].join(" ")}>
-                  <Image src={item.src} alt={item.alt || item.caption} fill sizes="60px" className="object-cover" />
-                </button>
-              ))}
             </div>
           </div>
 
-          {/* Next */}
-          <button type="button" aria-label="Következő" onClick={(e) => { e.stopPropagation(); showNext(); }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-14 w-14 items-center justify-center border border-slate-700 bg-slate-900/80 text-3xl text-white transition hover:border-orange-500 hover:bg-slate-800 sm:right-5 select-none">
-            ›
+          {/* Prev — left half tap zone */}
+          <button type="button" aria-label="Előző" onClick={(e) => { e.stopPropagation(); showPrev(); }}
+            className="absolute left-0 top-12 bottom-0 w-16 sm:w-24 flex items-center justify-start pl-2 sm:pl-4 text-white/50 hover:text-white transition group">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-2xl transition group-hover:bg-white/20 select-none">‹</span>
           </button>
+
+          {/* Next — right half tap zone */}
+          <button type="button" aria-label="Következő" onClick={(e) => { e.stopPropagation(); showNext(); }}
+            className="absolute right-0 top-12 bottom-0 w-16 sm:w-24 flex items-center justify-end pr-2 sm:pr-4 text-white/50 hover:text-white transition group">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-2xl transition group-hover:bg-white/20 select-none">›</span>
+          </button>
+
         </div>
       )}
     </>

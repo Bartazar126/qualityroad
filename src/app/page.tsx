@@ -253,15 +253,29 @@ export default async function Home() {
       {/* ════════════════════════════════════════════════════
           TRUST BADGES
       ════════════════════════════════════════════════════ */}
-      <section className="bg-white py-10">
+      <section className="bg-slate-950 py-16">
         <div className="site-section">
-          <p className="text-center text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Tanúsítványok &amp; minősítések</p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-10">
-            <div className="relative h-28 w-52">
-              <Image src="/badge-megbizhat.png" alt="Megbízható vállalkozás" fill className="object-contain" />
+          <p className="text-center text-[11px] font-extrabold tracking-[0.28em] text-orange-400 uppercase">Díjaink &amp; elismeréseink</p>
+          <h2 className="mt-3 text-center text-3xl font-black text-white sm:text-4xl">Minősített, elismert vállalkozás</h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-sm text-slate-400">
+            Független szervezetek által évente értékelt és elismerésben részesített céget választasz.
+          </p>
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 sm:gap-16">
+            {/* Round badge — larger */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative h-52 w-52 drop-shadow-[0_0_32px_rgba(234,179,8,0.25)]">
+                <Image src="/badge-megbizhat.png" alt="Kiemelten Megbízható Vállalkozás 2023" fill className="object-contain" priority />
+              </div>
+              <p className="text-center text-xs font-bold tracking-widest text-slate-400 uppercase">BCP Rating · 2023</p>
             </div>
-            <div className="relative h-28 w-52">
-              <Image src="/badge-dinamikus.png" alt="Dinamikusan fejlődő vállalkozás" fill className="object-contain" />
+
+            {/* Horizontal badge */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative h-28 w-72 drop-shadow-[0_0_24px_rgba(234,179,8,0.2)]">
+                <Image src="/badge-dinamikus.png" alt="Dinamikusan Fejlődő Vállalkozás 2023" fill className="object-contain" priority />
+              </div>
+              <p className="text-center text-xs font-bold tracking-widest text-slate-400 uppercase">BCP Rating · 2023</p>
             </div>
           </div>
         </div>
