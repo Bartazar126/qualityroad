@@ -76,5 +76,10 @@ export async function writeSiteContent(content: SiteContent): Promise<void> {
     await redis.set(REDIS_KEY, content);
     return;
   }
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "Redis nincs konfigurálva! Állítsd be az UPSTASH_REDIS_REST_URL és UPSTASH_REDIS_REST_TOKEN env változókat Vercelen.",
+    );
+  }
   await writeToFile(content);
 }

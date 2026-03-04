@@ -86,6 +86,13 @@ export async function POST(request: Request) {
       process.env.CLOUDINARY_API_KEY    &&
       process.env.CLOUDINARY_API_SECRET;
 
+    if (!useCloudinary && process.env.NODE_ENV === "production") {
+      return NextResponse.json(
+        { error: "Cloudinary nincs konfigurálva! Add hozzá a CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET env változókat Vercelen." },
+        { status: 500 },
+      );
+    }
+
     const src = useCloudinary
       ? await uploadToCloudinary(buffer, file.type, folder)
       : await uploadToFilesystem(buffer, folder, extension);
