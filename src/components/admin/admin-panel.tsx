@@ -57,7 +57,7 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
 
   const notify = (msg: string, ok = true) => {
     setToast({ msg, ok });
-    setTimeout(() => setToast(null), 3500);
+    setTimeout(() => setToast(null), ok ? 3500 : 8000);
   };
 
   const logout = async () => {
@@ -97,9 +97,8 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
       notify("Projekt elmentve ✓");
       router.refresh();
     } else {
-      const err = await res.json().catch(() => ({}));
-      console.error("save failed", res.status, err);
-      notify(`Mentési hiba! (${res.status})`, false);
+      const err = await res.json().catch(() => ({ error: "?" })) as { error?: string };
+      notify(err.error ?? `Mentési hiba! (${res.status})`, false);
     }
   };
 
@@ -120,9 +119,8 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
         notify("Projekt törölve.");
         router.refresh();
       } else {
-        const err = await res.json().catch(() => ({}));
-        console.error("delete failed", res.status, err);
-        notify(`Törlési hiba! (${res.status})`, false);
+        const err = await res.json().catch(() => ({ error: "?" })) as { error?: string };
+        notify(err.error ?? `Törlési hiba! (${res.status})`, false);
       }
     } catch (e) {
       console.error("delete error", e);
@@ -148,9 +146,8 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
       notify(isHidden ? "Projekt visszaállítva ✓" : "Projekt elrejtve az oldalról");
       router.refresh();
     } else {
-      const err = await res.json().catch(() => ({}));
-      console.error("toggle hide project failed", res.status, err);
-      notify(`Hiba! (${res.status})`, false);
+      const err = await res.json().catch(() => ({ error: "?" })) as { error?: string };
+      notify(err.error ?? `Hiba! (${res.status})`, false);
     }
   };
 
@@ -169,9 +166,8 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
       setContent(next);
       notify(hiddenImages.includes(src) ? "Kép elrejtve" : "Kép visszaállítva ✓");
     } else {
-      const err = await res.json().catch(() => ({}));
-      console.error("hide image failed", res.status, err);
-      notify(`Hiba! (${res.status})`, false);
+      const err = await res.json().catch(() => ({ error: "?" })) as { error?: string };
+      notify(err.error ?? `Hiba! (${res.status})`, false);
     }
   };
 
@@ -216,7 +212,7 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
     <div className="relative min-h-screen bg-slate-950 text-white">
 
       {toast && (
-        <div className={["fixed bottom-6 right-6 z-50 px-5 py-3 text-sm font-bold shadow-2xl",
+        <div className={["fixed bottom-6 right-6 z-50 max-w-sm px-5 py-3 text-sm font-bold shadow-2xl break-words",
           toast.ok ? "bg-orange-500 text-white" : "bg-red-600 text-white"].join(" ")}>
           {toast.msg}
         </div>

@@ -43,7 +43,8 @@ export async function PUT(request: Request) {
     await writeSiteContent(safe);
     return NextResponse.json({ ok: true });
   } catch (err) {
-    console.error("[PUT /api/site-content]", err);
-    return NextResponse.json({ error: "Mentési hiba a szerveren." }, { status: 500 });
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[PUT /api/site-content]", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
