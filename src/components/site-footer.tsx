@@ -27,8 +27,11 @@ export function SiteFooter() {
             <p className="mt-5 max-w-xs text-sm text-slate-400 leading-relaxed">
               &quot;Az út amely a jövőbe vezet a közös sikereinkért&quot;
             </p>
-            <p className="mt-3 text-xs text-slate-600 tracking-wider">
+              <p className="mt-3 text-xs text-slate-600 tracking-wider">
               QUALITY ROAD INTACT KFT · Alapítva {contactData.foundedYear}
+            </p>
+            <p className="mt-1 text-xs text-slate-600">
+              {contactData.address}
             </p>
           </div>
 
