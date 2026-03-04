@@ -6,8 +6,8 @@ import { GalleryItem } from "@/types/site-content";
 const LOGO_FILENAMES = new Set([
   "wellis.png", "airvent.png", "umbrolkft.png", "berekfurdo.jpeg",
   "wellis.jpg", "airvent.jpg", "umbrolkft.jpg", "berekfurdo.png",
-  "badge megbizhat.png", "badge-dinamikus.png",
-  "badge megbizhat.jpg", "badge-dinamikus.jpg",
+  "badge-megbizhat.png", "badge-dinamikus.png",
+  "badge-megbizhat.jpg", "badge-dinamikus.jpg",
 ]);
 
 function humanizeFilename(filename: string): string {

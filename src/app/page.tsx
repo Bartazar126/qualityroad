@@ -258,7 +258,7 @@ export default async function Home() {
           <p className="text-center text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Tanúsítványok &amp; minősítések</p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-10">
             <div className="relative h-28 w-52">
-              <Image src="/badge megbizhat.png" alt="Megbízható vállalkozás" fill className="object-contain" />
+              <Image src="/badge-megbizhat.png" alt="Megbízható vállalkozás" fill className="object-contain" />
             </div>
             <div className="relative h-28 w-52">
               <Image src="/badge-dinamikus.png" alt="Dinamikusan fejlődő vállalkozás" fill className="object-contain" />
