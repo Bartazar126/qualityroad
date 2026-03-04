@@ -251,6 +251,33 @@ export default async function Home() {
       </section>
 
       {/* ════════════════════════════════════════════════════
+          TRUST BADGES
+      ════════════════════════════════════════════════════ */}
+      <div className="bg-orange-500">
+        <div className="site-section py-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {[
+              "Garanciális kivitelezés",
+              "Díjmentes helyszíni szemle",
+              "Árajánlat 48 h-n belül",
+              "Saját géppark",
+              "15+ év tapasztalat",
+              "Minőségellenőrzött átadás",
+            ].map((badge) => (
+              <div key={badge} className="flex items-center gap-2">
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                  <svg viewBox="0 0 10 10" className="h-2.5 w-2.5 text-orange-500" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 5.5l2 2 4-4" />
+                  </svg>
+                </span>
+                <span className="text-[11px] font-extrabold tracking-[0.18em] text-white uppercase">{badge}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ════════════════════════════════════════════════════
           SERVICES
       ════════════════════════════════════════════════════ */}
       <section className="bg-slate-900 py-20">
@@ -379,25 +406,28 @@ export default async function Home() {
       {/* ════════════════════════════════════════════════════
           GALLERY
       ════════════════════════════════════════════════════ */}
-      {showcaseImages.length > 0 && (
-        <>
-          <section className="py-16">
-            <div className="site-section">
-              <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <p className="text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Képgaléria</p>
-                  <h2 className="mt-2 text-4xl font-black text-slate-900 sm:text-5xl">Munkáink képekben</h2>
-                  <p className="mt-2 text-sm text-slate-500">Kattints bármelyik képre a nagyobb nézethez.</p>
-                </div>
-                <Link href="/referenciak" className="text-sm font-bold tracking-wide text-slate-700 uppercase hover:text-orange-600 transition">
-                  Összes referencia →
-                </Link>
-              </div>
-              <ShowcaseLightbox images={showcaseImages} />
+      <section className="py-16 bg-slate-50">
+        <div className="site-section">
+          <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Képgaléria</p>
+              <h2 className="mt-2 text-4xl font-black text-slate-900 sm:text-5xl">Munkáink képekben</h2>
+              <p className="mt-2 text-sm text-slate-500">Kattints bármelyik képre a nagyobb nézethez.</p>
             </div>
-          </section>
-        </>
-      )}
+            <Link href="/referenciak" className="text-sm font-bold tracking-wide text-slate-700 uppercase hover:text-orange-600 transition">
+              Összes referencia →
+            </Link>
+          </div>
+          {showcaseImages.length > 0 ? (
+            <ShowcaseLightbox images={showcaseImages} />
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-3 border border-dashed border-slate-300 py-20 text-center">
+              <p className="text-sm font-semibold text-slate-400">Képek hamarosan — töltsd fel az admin felületen</p>
+              <Link href="/admin" className="text-xs font-bold text-orange-500 uppercase tracking-widest hover:text-orange-600 transition">Admin panel →</Link>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* ════════════════════════════════════════════════════
           PRICES + CTA
