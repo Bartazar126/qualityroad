@@ -5,9 +5,12 @@ import { randomUUID } from "node:crypto";
 
 export const dynamic = "force-dynamic";
 
-const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
 export async function POST(request: Request) {
+  const url = new URL(request.url);
+  const folder = url.searchParams.get("folder") ?? "";
+
   const formData = await request.formData();
   const file = formData.get("file");
 
@@ -16,19 +19,25 @@ export async function POST(request: Request) {
   }
 
   if (!allowedTypes.has(file.type)) {
-    return NextResponse.json({ error: "Csak JPG, PNG vagy WEBP képet tölts fel." }, { status: 400 });
+    return NextResponse.json({ error: "Csak JPG, PNG, WEBP vagy GIF képet tölts fel." }, { status: 400 });
   }
 
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
-
   const filename = `${Date.now()}-${randomUUID()}.${extension}`;
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
-  const fullPath = path.join(uploadsDir, filename);
 
-  await fs.mkdir(uploadsDir, { recursive: true });
-  await fs.writeFile(fullPath, buffer);
+  const uploadsBase = path.join(process.cwd(), "public", "uploads");
+  const targetDir = folder
+    ? path.join(uploadsBase, folder)
+    : uploadsBase;
 
-  return NextResponse.json({ src: `/uploads/${filename}` });
+  await fs.mkdir(targetDir, { recursive: true });
+  await fs.writeFile(path.join(targetDir, filename), buffer);
+
+  const src = folder
+    ? `/uploads/${encodeURIComponent(folder)}/${filename}`
+    : `/uploads/${filename}`;
+
+  return NextResponse.json({ src });
 }

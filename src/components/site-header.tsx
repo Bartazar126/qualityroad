@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { contactData } from "@/lib/company-data";
 
@@ -15,6 +16,7 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [logoErr, setLogoErr] = useState(false);
 
   return (
     <>
@@ -28,13 +30,27 @@ export function SiteHeader() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-3 py-4"
+            className="flex items-center gap-3 py-3"
             onClick={() => setOpen(false)}
           >
-            <span className="block h-7 w-[3px] bg-orange-500" aria-hidden="true" />
-            <span className="text-sm font-extrabold tracking-[0.18em] text-white uppercase">
-              Quality Road <span className="text-orange-400">Intact</span>
-            </span>
+            {logoErr ? (
+              <>
+                <span className="block h-7 w-[3px] bg-orange-500" aria-hidden="true" />
+                <span className="text-sm font-extrabold tracking-[0.18em] text-white uppercase">
+                  Quality Road <span className="text-orange-400">Intact</span>
+                </span>
+              </>
+            ) : (
+              <Image
+                src="/logo.png"
+                alt="Quality Road Intact Kft"
+                width={160}
+                height={40}
+                className="h-9 w-auto object-contain"
+                priority
+                onError={() => setLogoErr(true)}
+              />
+            )}
           </Link>
 
           {/* Desktop nav */}

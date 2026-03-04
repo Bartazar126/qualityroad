@@ -1,5 +1,31 @@
 import Link from "next/link";
+import Image from "next/image";
 import { contactData } from "@/lib/company-data";
+import { existsSync } from "node:fs";
+import path from "node:path";
+
+function FooterLogo() {
+  const hasLogo = existsSync(path.join(process.cwd(), "public", "logo.png"));
+  if (hasLogo) {
+    return (
+      <Image
+        src="/logo.png"
+        alt="Quality Road Intact Kft"
+        width={160}
+        height={44}
+        className="h-10 w-auto object-contain"
+      />
+    );
+  }
+  return (
+    <>
+      <span className="block h-8 w-[3px] bg-orange-500" />
+      <span className="text-sm font-extrabold tracking-[0.18em] uppercase">
+        Quality Road <span className="text-orange-400">Intact Kft</span>
+      </span>
+    </>
+  );
+}
 
 const navLinks = [
   { href: "/",            label: "Főoldal" },
@@ -18,11 +44,8 @@ export function SiteFooter() {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3">
-              <span className="block h-8 w-[3px] bg-orange-500" />
-              <span className="text-sm font-extrabold tracking-[0.18em] uppercase">
-                Quality Road <span className="text-orange-400">Intact Kft</span>
-              </span>
+            <div className="flex items-start gap-3">
+              <FooterLogo />
             </div>
             <p className="mt-5 max-w-xs text-sm text-slate-400 leading-relaxed">
               &quot;Az út amely a jövőbe vezet a közös sikereinkért&quot;
