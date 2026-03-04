@@ -253,29 +253,19 @@ export default async function Home() {
       {/* ════════════════════════════════════════════════════
           TRUST BADGES
       ════════════════════════════════════════════════════ */}
-      <div className="bg-orange-500">
-        <div className="site-section py-4">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-            {[
-              "Garanciális kivitelezés",
-              "Díjmentes helyszíni szemle",
-              "Árajánlat 48 h-n belül",
-              "Saját géppark",
-              "15+ év tapasztalat",
-              "Minőségellenőrzött átadás",
-            ].map((badge) => (
-              <div key={badge} className="flex items-center gap-2">
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
-                  <svg viewBox="0 0 10 10" className="h-2.5 w-2.5 text-orange-500" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 5.5l2 2 4-4" />
-                  </svg>
-                </span>
-                <span className="text-[11px] font-extrabold tracking-[0.18em] text-white uppercase">{badge}</span>
-              </div>
-            ))}
+      <section className="bg-white py-10">
+        <div className="site-section">
+          <p className="text-center text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Tanúsítványok &amp; minősítések</p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-10">
+            <div className="relative h-28 w-52">
+              <Image src="/badge megbizhat.png" alt="Megbízható vállalkozás" fill className="object-contain" />
+            </div>
+            <div className="relative h-28 w-52">
+              <Image src="/badge-dinamikus.png" alt="Dinamikusan fejlődő vállalkozás" fill className="object-contain" />
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* ════════════════════════════════════════════════════
           SERVICES

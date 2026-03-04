@@ -2,10 +2,12 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { GalleryItem } from "@/types/site-content";
 
-// These are client logo files stored in public/uploads — exclude from gallery
+// These are client logo / badge files — exclude from gallery
 const LOGO_FILENAMES = new Set([
   "wellis.png", "airvent.png", "umbrolkft.png", "berekfurdo.jpeg",
   "wellis.jpg", "airvent.jpg", "umbrolkft.jpg", "berekfurdo.png",
+  "badge megbizhat.png", "badge-dinamikus.png",
+  "badge megbizhat.jpg", "badge-dinamikus.jpg",
 ]);
 
 function humanizeFilename(filename: string): string {
