@@ -58,7 +58,7 @@ export function ShowcaseLightbox({ images, hideCaptions = false }: ShowcaseLight
             onClick={() => setActiveIndex(index)}
             className="group relative overflow-hidden bg-slate-900 text-left"
           >
-            <div className="relative aspect-[5/4]">
+            <div className="relative aspect-5/4 bg-slate-800">
               <Image
                 src={item.src}
                 alt={item.alt || item.caption}
@@ -66,7 +66,8 @@ export function ShowcaseLightbox({ images, hideCaptions = false }: ShowcaseLight
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 loading={index < 6 ? "eager" : "lazy"}
                 priority={index < 3}
-                className="object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-100"
+                placeholder="empty"
+                className="object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 

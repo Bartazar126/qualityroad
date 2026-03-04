@@ -19,13 +19,22 @@ async function uploadToCloudinary(buffer: Buffer, folder: string): Promise<strin
   const base64 = `data:image/jpeg;base64,${buffer.toString("base64")}`;
 
   const result = await cloudinary.uploader.upload(base64, {
-    folder:  folder ? `qualityroad/${folder}` : "qualityroad",
-    use_filename: false,
+    folder:          folder ? `qualityroad/${folder}` : "qualityroad",
+    use_filename:    false,
     unique_filename: true,
-    overwrite: false,
+    overwrite:       false,
+    quality:         "auto",
+    fetch_format:    "auto",
   });
 
-  return result.secure_url;
+  // Inject q_auto,f_auto,w_1920 into the URL so browsers always get
+  // an optimised version even if the Image component doesn't resize it
+  const optimisedUrl = result.secure_url.replace(
+    "/upload/",
+    "/upload/q_auto,f_auto,w_1920/",
+  );
+
+  return optimisedUrl;
 }
 
 /* ── Filesystem upload (development) ─────────────────────────────────── */
