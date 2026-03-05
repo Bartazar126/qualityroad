@@ -70,14 +70,12 @@ export default function ArainkPage() {
               Kérjen személyre szabott ajánlatot —<br className="hidden sm:block" /> hamarosan visszajelzünk!
             </p>
           </div>
-          <div className="flex items-center bg-orange-500 px-8">
-            <Link
-              href="/kapcsolat"
-              className="text-sm font-extrabold tracking-[0.2em] text-white uppercase hover:text-orange-100 transition whitespace-nowrap"
-            >
-              Ajánlatkérés →
-            </Link>
-          </div>
+          <Link
+            href="/kapcsolat"
+            className="flex min-h-[56px] items-center justify-center bg-orange-500 px-8 text-sm font-extrabold tracking-[0.2em] text-white uppercase hover:bg-orange-600 transition whitespace-nowrap"
+          >
+            Ajánlatkérés →
+          </Link>
         </div>
 
       </div>

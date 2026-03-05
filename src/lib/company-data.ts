@@ -102,7 +102,7 @@ export const folderProjects = [
 
 export const contactData = {
   companyName: "QUALITY ROAD INTACT KFT",
-  companyNameFull: "Quality Road Intact Korlátolt Felelősségű Társaság",
+  companyNameFull: "Quality Road Intact Kft",
   foundedYear: "2018",
   taxNumber: "26387275-2-13",
   mainActivity: "4211 — Út, autópálya építése",

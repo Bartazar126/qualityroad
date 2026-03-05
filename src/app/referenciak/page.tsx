@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Camera } from "lucide-react";
 import { readSiteContent } from "@/lib/site-content";
-import { getFallbackGallery } from "@/lib/fallback-gallery";
 import { contactData, referenceList, folderProjects } from "@/lib/company-data";
 import { getProjectFolderImages } from "@/lib/project-gallery";
 import { ShowcaseLightbox } from "@/components/home/showcase-lightbox";
@@ -23,16 +22,10 @@ const refStats = [
 ];
 
 export default async function ReferenciakPage() {
-  const content         = await readSiteContent();
-  const fallbackGallery = await getFallbackGallery();
+  const content = await readSiteContent();
 
   const hiddenSet        = new Set(content.hiddenImages ?? []);
   const hiddenProjectSet = new Set(content.hiddenProjects ?? []);
-
-  const filteredFallback = fallbackGallery.filter((img) => !hiddenSet.has(img.src));
-  const gallery: GalleryItem[] = content.gallery.length > 0
-    ? content.gallery.filter((img) => !hiddenSet.has(img.src))
-    : filteredFallback;
 
   /* ── Folder-based projects ── */
   const resolvedFolderProjects = folderProjects
@@ -95,12 +88,12 @@ export default async function ReferenciakPage() {
             <div className="mt-8 flex flex-wrap gap-2">
               {allProjects.map((p) => (
                 <a key={p.id} href={`#${p.id}`}
-                  className="border border-slate-700 px-4 py-1.5 text-[10px] font-extrabold tracking-[0.2em] text-slate-400 uppercase transition hover:border-orange-500 hover:text-orange-400">
+                  className="flex min-h-[44px] items-center border border-slate-700 px-4 text-[10px] font-extrabold tracking-[0.2em] text-slate-400 uppercase transition hover:border-orange-500 hover:text-orange-400">
                   {p.name}
                 </a>
               ))}
               <a href="#lista"
-                className="border border-slate-700 px-4 py-1.5 text-[10px] font-extrabold tracking-[0.2em] text-slate-400 uppercase transition hover:border-orange-500 hover:text-orange-400">
+                className="flex min-h-[44px] items-center border border-slate-700 px-4 text-[10px] font-extrabold tracking-[0.2em] text-slate-400 uppercase transition hover:border-orange-500 hover:text-orange-400">
                 Teljes lista
               </a>
             </div>
@@ -145,8 +138,8 @@ export default async function ReferenciakPage() {
 
               {/* right: logo */}
               {project.logoSrc && (
-                <div className="shrink-0 border border-slate-100 bg-white shadow-md p-6 flex items-center justify-center" style={{ minWidth: 200, minHeight: 110 }}>
-                  <div className="relative h-20 w-52">
+                <div className="shrink-0 border border-slate-100 bg-white shadow-md p-6 flex items-center justify-center min-w-0 w-full sm:w-auto sm:min-w-[200px] sm:min-h-[110px]">
+                  <div className="relative h-20 w-full max-w-[208px]">
                     <Image
                       src={project.logoSrc}
                       alt={`${project.name} logó`}
@@ -204,22 +197,93 @@ export default async function ReferenciakPage() {
       </section>
 
       {/* ════════════════════════════════════════════
-          GALLERY
+          BENTO — WHY US
       ════════════════════════════════════════════ */}
-      {gallery.length > 0 && (
-        <>
-          <section id="galeria" className="py-16 bg-white border-t border-slate-100">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-              <p className="text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Képgaléria</p>
-              <h2 className="mt-2 text-4xl font-black text-slate-900 sm:text-5xl">Összes munkakép</h2>
-              <p className="mt-2 text-sm text-slate-500">Kattints bármelyik képre a teljes mérethez és lapozáshoz.</p>
-              <div className="mt-8">
-                <ShowcaseLightbox images={gallery} hideCaptions />
+      <section className="bg-slate-950 py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+
+          <p className="text-[11px] font-extrabold tracking-[0.28em] text-orange-400 uppercase">Miért minket?</p>
+          <h2 className="mt-3 text-4xl font-black text-white sm:text-5xl">
+            A számok <span className="text-orange-400">magukért</span> beszélnek.
+          </h2>
+
+          {/* Bento grid */}
+          <div className="mt-12 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:grid-rows-2">
+
+            {/* BIG — 15 év */}
+            <div className="col-span-2 row-span-2 bg-orange-500 p-8 flex flex-col justify-between min-h-[280px] relative overflow-hidden">
+              <span className="absolute -bottom-6 -right-4 text-[11rem] font-black leading-none text-orange-400/30 select-none pointer-events-none">15</span>
+              <div>
+                <p className="text-[10px] font-extrabold tracking-[0.28em] text-white/60 uppercase">Szakmai múlt</p>
+                <p className="mt-3 text-4xl font-black text-white leading-none sm:text-5xl">15+ év<br />tapasztalat</p>
+              </div>
+              <p className="relative z-10 text-sm text-white/80 leading-relaxed max-w-xs">
+                2018 óta önálló vállalkozásként, de közel másfél évtizedes szakmai tudással állunk megrendelőink mögé.
+              </p>
+            </div>
+
+            {/* 50+ projekt */}
+            <div className="bg-slate-900 border border-slate-800 p-6 flex flex-col justify-between">
+              <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-500 uppercase">Projektek</p>
+              <div>
+                <p className="text-5xl font-black text-white leading-none">50<span className="text-orange-400">+</span></p>
+                <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">elvégzett munka</p>
               </div>
             </div>
-          </section>
-        </>
-      )}
+
+            {/* 30 000 m² */}
+            <div className="bg-slate-900 border border-slate-800 p-6 flex flex-col justify-between">
+              <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-500 uppercase">Terület</p>
+              <div>
+                <p className="text-4xl font-black text-white leading-none">30k<span className="text-orange-400">+</span></p>
+                <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">m² aszfalt</p>
+              </div>
+            </div>
+
+            {/* Garancia */}
+            <div className="bg-white p-6 flex flex-col justify-between">
+              <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-400 uppercase">Vállalás</p>
+              <div>
+                <p className="text-3xl font-black text-slate-900 leading-tight">100%<br />garanciális</p>
+                <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">minden munka</p>
+              </div>
+            </div>
+
+            {/* 48 óra */}
+            <div className="bg-slate-800 p-6 flex flex-col justify-between">
+              <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-500 uppercase">Reakcióidő</p>
+              <div>
+                <p className="text-4xl font-black text-orange-400 leading-none">48h</p>
+                <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">ajánlatküldés</p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Badges row */}
+          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="border border-slate-800 bg-slate-900 p-6 flex items-center gap-6">
+              <div className="relative h-20 w-20 shrink-0">
+                <Image src="/badge-megbizhat.png" alt="Kiemelten Megbízható Vállalkozás" fill className="object-contain" />
+              </div>
+              <div>
+                <p className="font-black text-white text-base">Kiemelten Megbízható<br />Vállalkozás</p>
+                <p className="mt-1 text-[10px] font-bold tracking-widest text-orange-400 uppercase">BCP Rating · 2023</p>
+              </div>
+            </div>
+            <div className="border border-slate-800 bg-slate-900 p-6 flex items-center gap-6">
+              <div className="relative h-14 w-40 shrink-0">
+                <Image src="/badge-dinamikus.png" alt="Dinamikusan Fejlődő Vállalkozás" fill className="object-contain" />
+              </div>
+              <div>
+                <p className="font-black text-white text-base">Dinamikusan Fejlődő<br />Vállalkozás</p>
+                <p className="mt-1 text-[10px] font-bold tracking-widest text-orange-400 uppercase">BCP Rating · 2023</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* ════════════════════════════════════════════
           CTA

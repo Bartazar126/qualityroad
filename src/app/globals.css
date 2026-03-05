@@ -17,6 +17,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .site-section {
@@ -91,8 +92,8 @@ body {
     90deg,
     #f97316 0%,
     #f97316 61.5%,
-    transparent 61.5%,
-    transparent 100%
+    #0f172a 61.5%,
+    #0f172a 100%
   );
   background-size: 52px 6px;
   background-repeat: repeat-x;

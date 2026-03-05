@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { GoogleAdsBodySnippet, GoogleAdsHeadSnippet } from "@/components/google-ads-snippets";
+import { CookieBanner } from "@/components/cookie-banner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,6 +14,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://qualityroad.hu"
+  ),
   title: {
     template: "%s | Quality Road Intact Kft",
     default: "Quality Road Intact Kft – Útépítés, aszfaltozás, útfelújítás",
@@ -32,8 +36,18 @@ export const metadata: Metadata = {
     title: "Quality Road Intact Kft – Útépítés, aszfaltozás",
     description:
       "Prémium útépítés, aszfaltozás és útfelújítás közel 15 év szakmai tapasztalattal. Hívjon: 06/70-434-07-66",
+    url: "/",
+    siteName: "Quality Road Intact Kft",
     locale: "hu_HU",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Quality Road Intact Kft – Útépítés, aszfaltozás",
+      },
+    ],
   },
   robots: {
     index: true,
@@ -58,15 +72,28 @@ export default function RootLayout({
   return (
     <html lang="hu">
       <head>
+        {/* Google Consent Mode v2 — default: minden tiltva, amíg a user el nem fogad */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', {
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            analytics_storage: 'denied',
+            wait_for_update: 500
+          });
+        `}} />
         <GoogleAdsHeadSnippet />
       </head>
       <body className={`${inter.variable} antialiased`}>
         <SiteHeader />
-        {/* Spacer compensates for the fixed header (~52 px) */}
-        <div className="h-[52px]" aria-hidden="true" />
+        {/* Spacer compensates for the fixed header (~72 px: 56px logo + 16px padding) */}
+        <div className="h-[72px]" aria-hidden="true" />
         <main>{children}</main>
         <SiteFooter />
         <GoogleAdsBodySnippet />
+        <CookieBanner />
       </body>
     </html>
   );

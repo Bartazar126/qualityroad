@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { contactData } from "@/lib/company-data";
 
 const navItems = [
   { href: "/",            label: "Főoldal" },
@@ -76,13 +75,13 @@ export function SiteHeader() {
             })}
           </nav>
 
-          {/* Desktop phone CTA */}
-          <a
-            href={`tel:${contactData.phone}`}
+          {/* Desktop CTA */}
+          <Link
+            href="/kapcsolat"
             className="hidden items-center bg-orange-500 px-5 py-4 text-[10px] font-extrabold tracking-[0.2em] text-white uppercase transition hover:bg-orange-600 md:flex"
           >
-            {contactData.phoneDisplay}
-          </a>
+            Ajánlatkérés
+          </Link>
 
           {/* Mobile hamburger */}
           <button
@@ -109,7 +108,7 @@ export function SiteHeader() {
       ──────────────────────────────────────────────────────────── */}
       <div
         className={[
-          "fixed inset-x-0 top-[52px] z-40 bg-slate-950 border-b border-slate-800 md:hidden",
+          "fixed inset-x-0 top-[72px] z-40 bg-slate-950 border-b border-slate-800 md:hidden",
           "overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out",
           open ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0 pointer-events-none",
         ].join(" ")}
@@ -133,13 +132,13 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <a
-            href={`tel:${contactData.phone}`}
+          <Link
+            href="/kapcsolat"
             onClick={() => setOpen(false)}
             className="mt-4 flex min-h-[44px] items-center justify-center bg-orange-500 px-6 text-sm font-extrabold tracking-widest text-white uppercase hover:bg-orange-600"
           >
-            {contactData.phoneDisplay}
-          </a>
+            Ajánlatkérés
+          </Link>
         </nav>
       </div>
     </>

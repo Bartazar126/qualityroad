@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { contactData } from "@/lib/company-data";
+import { CookieSettingsButton } from "@/components/cookie-banner";
 
 function FooterLogo() {
   return (
@@ -55,6 +56,15 @@ export function SiteFooter() {
             <p className="mt-1 text-xs text-slate-600">
               {contactData.address}
             </p>
+            <a href="https://nexuscode.hu" target="_blank" rel="noopener noreferrer"
+              className="group mt-6 inline-flex items-center gap-2 transition">
+              <span className="text-[9px] tracking-widest text-slate-700 uppercase transition group-hover:text-slate-500">
+                Tervezte &amp; fejlesztette
+              </span>
+              <span className="border border-slate-800 px-2.5 py-1 text-[9px] font-extrabold tracking-[0.18em] text-slate-600 uppercase transition group-hover:border-orange-500 group-hover:text-orange-400">
+                NEXUSCODE.HU
+              </span>
+            </a>
           </div>
 
           {/* Navigation */}
@@ -111,9 +121,13 @@ export function SiteFooter() {
           <p className="text-[10px] tracking-widest text-slate-600 uppercase">
             © {new Date().getFullYear()} QUALITY ROAD INTACT KFT — Minden jog fenntartva
           </p>
-          <p className="text-[10px] tracking-widest text-slate-600 uppercase">
-            Designed by NEXUSCODE
-          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link href="/adatvedelmi-nyilatkozat"
+              className="text-[10px] tracking-widest text-slate-600 uppercase transition hover:text-slate-400">
+              Adatvédelmi nyilatkozat
+            </Link>
+            <CookieSettingsButton />
+          </div>
         </div>
       </div>
     </footer>

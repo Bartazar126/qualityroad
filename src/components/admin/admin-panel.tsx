@@ -39,18 +39,25 @@ interface AdminPanelProps {
 export function AdminPanel({ folderProjects }: AdminPanelProps) {
   const router = useRouter();
 
-  const [content, setContent] = useState<SiteContent | null>(null);
-  const [active, setActive]   = useState<ActiveKind>(null);
-  const [draft, setDraft]     = useState<ProjectReference | null>(null);
-  const [saving, setSaving]   = useState(false);
-  const [toast, setToast]     = useState<Toast | null>(null);
-  const [dragIdx, setDragIdx] = useState<number | null>(null);
-  const [dropIdx, setDropIdx] = useState<number | null>(null);
+  const [content, setContent]             = useState<SiteContent | null>(null);
+  const [mainTab, setMainTab]             = useState<"projects" | "google-ads">("projects");
+  const [active, setActive]               = useState<ActiveKind>(null);
+  const [draft, setDraft]                 = useState<ProjectReference | null>(null);
+  const [saving, setSaving]               = useState(false);
+  const [toast, setToast]                 = useState<Toast | null>(null);
+  const [dragIdx, setDragIdx]             = useState<number | null>(null);
+  const [dropIdx, setDropIdx]             = useState<number | null>(null);
+  const [adsDraft, setAdsDraft]           = useState({ headSnippet: "", bodySnippet: "" });
+  const [adsSaving, setAdsSaving]         = useState(false);
 
   const load = useCallback(async () => {
     const res  = await fetch("/api/site-content");
     const data = (await res.json()) as SiteContent;
     setContent(data);
+    setAdsDraft({
+      headSnippet: data.googleAds?.headSnippet ?? "",
+      bodySnippet: data.googleAds?.bodySnippet ?? "",
+    });
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -194,6 +201,31 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
   };
   const onDragEnd = () => { setDragIdx(null); setDropIdx(null); };
 
+  /* ── google ads save ─────────────────────────────── */
+  const saveGoogleAds = async () => {
+    if (!content) return;
+    setAdsSaving(true);
+    try {
+      const next: SiteContent = { ...content, googleAds: adsDraft };
+      const res = await fetch("/api/site-content", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(next),
+      });
+      if (res.ok) {
+        setContent(next);
+        notify("Google Ads kód mentve ✓");
+      } else {
+        const err = await res.json().catch(() => ({ error: "?" })) as { error?: string };
+        notify(err.error ?? `Hiba! (${res.status})`, false);
+      }
+    } catch (e) {
+      notify(e instanceof Error ? e.message : "Mentési hiba", false);
+    } finally {
+      setAdsSaving(false);
+    }
+  };
+
   /* ════════════════════════════════════════════════════
      RENDER
   ════════════════════════════════════════════════════ */
@@ -221,10 +253,12 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
 
         {/* Header */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-extrabold tracking-[0.3em] text-orange-400 uppercase">Admin felület</p>
-            <h1 className="mt-1 text-3xl font-black text-white">Projekt kezelő</h1>
+            <h1 className="mt-1 text-3xl font-black text-white">
+              {mainTab === "google-ads" ? "Google Ads / Tracking" : "Projekt kezelő"}
+            </h1>
           </div>
           <div className="flex gap-3">
             <a href="/" className="border border-slate-700 px-4 py-2 text-xs font-bold tracking-widest text-slate-400 uppercase transition hover:text-white">← Weboldal</a>
@@ -234,6 +268,26 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
             </button>
           </div>
         </div>
+
+        {/* Tab navigation */}
+        <div className="mb-8 flex gap-1 border-b border-slate-800">
+          {(["projects", "google-ads"] as const).map((tab) => (
+            <button key={tab} type="button" onClick={() => setMainTab(tab)}
+              className={["px-5 py-2.5 text-xs font-extrabold tracking-widest uppercase transition border-b-2",
+                mainTab === tab
+                  ? "border-orange-500 text-orange-400"
+                  : "border-transparent text-slate-500 hover:text-white"].join(" ")}>
+              {tab === "projects" ? "Projektek" : "Google Ads"}
+            </button>
+          ))}
+        </div>
+
+        {mainTab === "google-ads" ? (
+          <GoogleAdsEditor
+            draft={adsDraft} setDraft={setAdsDraft}
+            onSave={saveGoogleAds} saving={adsSaving}
+          />
+        ) : (
 
         <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
 
@@ -302,6 +356,8 @@ export function AdminPanel({ folderProjects }: AdminPanelProps) {
             </div>
           )}
         </div>
+
+        )} {/* end google-ads ternary */}
       </div>
     </div>
   );
@@ -548,5 +604,76 @@ function FolderProjectEditor({
         Referencia oldal →
       </a>
     </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   Google Ads Editor
+═══════════════════════════════════════════════════════ */
+interface GoogleAdsEditorProps {
+  draft: { headSnippet: string; bodySnippet: string };
+  setDraft: (d: { headSnippet: string; bodySnippet: string }) => void;
+  onSave: () => void;
+  saving: boolean;
+}
+
+function GoogleAdsEditor({ draft, setDraft, onSave, saving }: GoogleAdsEditorProps) {
+  return (
+    <div className="space-y-6 max-w-3xl">
+
+      <div className="border border-slate-800 bg-slate-900 p-6 space-y-2">
+        <p className="text-[10px] font-extrabold tracking-[0.2em] text-orange-400 uppercase">Útmutató</p>
+        <p className="text-sm text-slate-400 leading-relaxed">
+          A Google Ads / Google Analytics <strong className="text-white">gtag.js</strong> kódot másold be az alábbi mezőbe.
+          A <strong className="text-white">&lt;head&gt;</strong> kód kerül a lap fejlécébe (pl. <code className="text-orange-300">{"<script async src=...>"}</code>),
+          a <strong className="text-white">&lt;body&gt;</strong> kód a lap aljára (pl. <code className="text-orange-300">{"<noscript>..."}</code>).
+          Üres mező esetén semmi nem kerül be az oldalba.
+        </p>
+      </div>
+
+      <div className="border border-slate-800 bg-slate-900 p-6 space-y-4">
+        <label className="block text-[10px] font-extrabold tracking-[0.2em] text-orange-400 uppercase">
+          &lt;head&gt; kód — gtag / Global Site Tag
+        </label>
+        <textarea
+          rows={10}
+          value={draft.headSnippet}
+          onChange={(e) => setDraft({ ...draft, headSnippet: e.target.value })}
+          placeholder={"<!-- Google tag (gtag.js) -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'AW-XXXXXXXXX');\n</script>"}
+          spellCheck={false}
+          className="w-full border border-slate-700 bg-slate-800 px-3 py-2.5 font-mono text-xs text-green-300 placeholder-slate-600 focus:border-orange-500 focus:outline-none resize-y"
+        />
+      </div>
+
+      <div className="border border-slate-800 bg-slate-900 p-6 space-y-4">
+        <label className="block text-[10px] font-extrabold tracking-[0.2em] text-orange-400 uppercase">
+          &lt;body&gt; kód — noscript / egyéb
+        </label>
+        <textarea
+          rows={6}
+          value={draft.bodySnippet}
+          onChange={(e) => setDraft({ ...draft, bodySnippet: e.target.value })}
+          placeholder={"<noscript>...</noscript>"}
+          spellCheck={false}
+          className="w-full border border-slate-700 bg-slate-800 px-3 py-2.5 font-mono text-xs text-green-300 placeholder-slate-600 focus:border-orange-500 focus:outline-none resize-y"
+        />
+      </div>
+
+      <button
+        type="button"
+        onClick={onSave}
+        disabled={saving}
+        className="bg-orange-500 px-8 py-3 text-sm font-extrabold tracking-widest text-white uppercase transition hover:bg-orange-600 disabled:opacity-50">
+        {saving ? "Mentés…" : "Mentés"}
+      </button>
+
+      {draft.headSnippet.trim() && (
+        <div className="border border-green-800 bg-green-950/30 p-4">
+          <p className="text-[10px] font-extrabold tracking-widest text-green-400 uppercase">
+            ✓ Head snippet aktív — {draft.headSnippet.length} karakter
+          </p>
+        </div>
+      )}
+    </div>
   );
 }

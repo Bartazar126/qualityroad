@@ -179,7 +179,7 @@ export default async function Home() {
             {stats.map((stat) => (
               <div key={stat.label} className="flex flex-1 flex-col items-center justify-center px-2 py-3 text-center sm:px-4 sm:py-4">
                 <p className="text-xl font-black text-orange-400 leading-none sm:text-3xl">{stat.value}</p>
-                <p className="mt-0.5 text-[8px] font-bold tracking-[0.15em] text-slate-500 uppercase sm:text-[10px]">{stat.label}</p>
+                <p className="mt-0.5 text-[9px] font-bold tracking-[0.12em] text-slate-500 uppercase sm:text-[10px]">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -194,8 +194,8 @@ export default async function Home() {
 
           <article>
             <p className="text-[11px] font-extrabold tracking-[0.28em] text-orange-500 uppercase">Bemutatkozás</p>
-            <h2 className="mt-3 text-5xl font-black leading-[1.02] text-slate-900 sm:text-6xl">
-              Megbízható útépítési<br />partner közel<br />
+            <h2 className="mt-3 text-4xl font-black leading-[1.05] text-slate-900 sm:text-5xl lg:text-6xl">
+              Megbízható útépítési partner közel{" "}
               <span className="text-orange-500">15 éve.</span>
             </h2>
             <div className="mt-7 space-y-4 text-slate-600 leading-relaxed max-w-2xl">
@@ -272,7 +272,7 @@ export default async function Home() {
 
             {/* Horizontal badge */}
             <div className="flex flex-col items-center gap-4">
-              <div className="relative h-28 w-72 drop-shadow-[0_0_24px_rgba(234,179,8,0.2)]">
+              <div className="relative h-28 w-60 sm:w-72 drop-shadow-[0_0_24px_rgba(234,179,8,0.2)]">
                 <Image src="/badge-dinamikus.png" alt="Dinamikusan Fejlődő Vállalkozás 2023" fill className="object-contain" priority />
               </div>
               <p className="text-center text-xs font-bold tracking-widest text-slate-400 uppercase">BCP Rating · 2023</p>
@@ -448,17 +448,17 @@ export default async function Home() {
               <div className="mt-6 divide-y divide-slate-200 border border-slate-200">
                 {pricePreview.map((price, i) => (
                   <div key={price.name}
-                    className="group flex flex-wrap items-start justify-between gap-3 p-4 transition hover:bg-slate-50">
-                    <div className="flex items-start gap-3">
-                      <span className="mt-0.5 text-2xl font-black leading-none text-slate-100 select-none transition group-hover:text-orange-100">
+                    className="group flex flex-col gap-1 p-4 transition hover:bg-slate-50 sm:grid sm:grid-cols-[auto_1fr_auto] sm:items-start sm:gap-3">
+                    <div className="flex items-start gap-3 sm:contents">
+                      <span className="mt-0.5 text-2xl font-black leading-none text-slate-100 select-none transition group-hover:text-orange-100 shrink-0">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <div>
+                      <div className="flex-1">
                         <p className="font-semibold text-slate-800">{price.name}</p>
                         <p className="mt-0.5 text-xs text-slate-500">{price.details}</p>
                       </div>
                     </div>
-                    <p className="font-black text-orange-600">{price.value}</p>
+                    <p className="pl-9 font-black text-orange-600 sm:pl-0 sm:text-right">{price.value}</p>
                   </div>
                 ))}
               </div>
@@ -478,11 +478,11 @@ export default async function Home() {
               <p className="mt-3 text-sm text-white/80">
                 Rövid egyeztetés után írásban visszajelzünk a várható költségekről. Nincs kötelezettség.
               </p>
-              <div className="mt-6 space-y-2">
+              <div className="mt-6 space-y-3">
                 {contactData.contacts.map((c) => (
-                  <a key={c.name} href={`tel:${c.phone}`} className="block">
-                    <span className="text-[10px] font-bold text-white/60">{c.name}</span>
-                    <span className="ml-2 text-xl font-black text-white transition hover:text-orange-100">{c.phoneDisplay}</span>
+                  <a key={c.name} href={`tel:${c.phone}`} className="block group">
+                    <span className="block text-[10px] font-bold text-white/60 uppercase tracking-widest">{c.name}</span>
+                    <span className="block text-2xl font-black text-white transition group-hover:text-orange-100">{c.phoneDisplay}</span>
                   </a>
                 ))}
               </div>
