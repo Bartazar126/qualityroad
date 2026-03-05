@@ -29,30 +29,46 @@ export function DropZone({
 
     setUploading(true);
     setError(null);
+
     const srcs: string[] = [];
+    const failed: string[] = [];
 
     for (let i = 0; i < imageFiles.length; i++) {
+      const file = imageFiles[i];
       try {
         const fd = new FormData();
-        fd.append("file", imageFiles[i]);
+        fd.append("file", file);
         const url = `/api/upload${folder ? `?folder=${encodeURIComponent(folder)}` : ""}`;
-        const res = await fetch(url, { method: "POST", body: fd });
+
+        const res = await fetch(url, { method: "POST", body: fd, signal: AbortSignal.timeout(55_000) });
         const data = (await res.json()) as { src?: string; error?: string };
+
         if (data.src) {
           srcs.push(data.src);
         } else {
-          setError(data.error ?? "Ismeretlen feltöltési hiba");
+          failed.push(file.name);
+          console.error("upload error:", data.error);
         }
       } catch (e) {
-        console.error("upload error", e);
-        setError("Hálózati hiba a feltöltéskor");
+        failed.push(file.name);
+        console.error("upload network error", e);
       }
+
       setProgress(Math.round(((i + 1) / imageFiles.length) * 100));
     }
 
     setUploading(false);
     setProgress(0);
+
     if (srcs.length > 0) onUpload(srcs);
+
+    if (failed.length > 0) {
+      setError(
+        failed.length === imageFiles.length
+          ? "Minden kép feltöltése sikertelen — ellenőrizd a hálózatot."
+          : `${srcs.length}/${imageFiles.length} kép feltöltve. Sikertelen: ${failed.join(", ")}`,
+      );
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {

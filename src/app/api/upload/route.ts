@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 60; // Vercel: max 60s a Hobby tervnél
 
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
