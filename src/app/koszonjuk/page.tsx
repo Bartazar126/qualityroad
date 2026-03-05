@@ -6,8 +6,8 @@ import Link from "next/link";
 export default function KoszonjukPage() {
   useEffect(() => {
     // Google Ads conversion event — csak akkor fut ha a gtag be van állítva
-    if (typeof window !== "undefined" && typeof (window as { gtag?: Function }).gtag === "function") {
-      (window as { gtag: Function }).gtag("event", "conversion", {
+    if (typeof window !== "undefined" && typeof (window as unknown as { gtag?: unknown }).gtag === "function") {
+      (window as unknown as { gtag: (...args: unknown[]) => void }).gtag("event", "conversion", {
         event_category: "contact",
         event_label: "ajanlatkeresform",
       });
