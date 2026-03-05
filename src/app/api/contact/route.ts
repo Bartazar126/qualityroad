@@ -38,8 +38,7 @@ export async function POST(request: Request) {
         to:      [{ email: toEmail, name: "Quality Road Intact Kft" }],
         replyTo: email?.trim() ? { email: email.trim(), name: name.trim() } : undefined,
         subject: `Új ajánlatkérés: ${name.trim()}`,
-        htmlContent:
-      html: `<!DOCTYPE html>
+        htmlContent: `<!DOCTYPE html>
 <html lang="hu">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#0f172a;font-family:'Helvetica Neue',Arial,sans-serif;">
