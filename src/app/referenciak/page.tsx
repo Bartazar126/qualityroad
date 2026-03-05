@@ -15,9 +15,9 @@ export const metadata = {
 };
 
 const refStats = [
-  { value: "50+",    label: "elvégzett projekt" },
-  { value: "15+",    label: "év tapasztalat" },
-  { value: "30 000+", label: "m² aszfalt" },
+  { value: "120+",     label: "elvégzett projekt" },
+  { value: "15+",      label: "év tapasztalat" },
+  { value: "80.000+",  label: "m² aszfalt" },
   { value: "100%",   label: "garanciális munka" },
 ];
 
@@ -182,13 +182,11 @@ export default async function ReferenciakPage() {
             {referenceList.map((reference) => {
               const dashIdx = reference.indexOf(" - ");
               const name    = dashIdx !== -1 ? reference.slice(0, dashIdx) : reference;
-              const details = dashIdx !== -1 ? reference.slice(dashIdx + 3) : "";
               return (
                 <div key={reference}
                   className="group relative border border-slate-200 bg-white p-5 transition hover:border-orange-400 hover:shadow-sm">
                   <div className="absolute left-0 top-0 bottom-0 w-[3px] origin-bottom scale-y-0 bg-orange-500 transition-transform duration-300 group-hover:scale-y-100" />
                   <p className="font-bold text-slate-800 text-sm">{name}</p>
-                  {details && <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">{details}</p>}
                 </div>
               );
             })}
@@ -226,16 +224,16 @@ export default async function ReferenciakPage() {
             <div className="bg-slate-900 border border-slate-800 p-6 flex flex-col justify-between">
               <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-500 uppercase">Projektek</p>
               <div>
-                <p className="text-5xl font-black text-white leading-none">50<span className="text-orange-400">+</span></p>
+                <p className="text-5xl font-black text-white leading-none">120<span className="text-orange-400">+</span></p>
                 <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">elvégzett munka</p>
               </div>
             </div>
 
-            {/* 30 000 m² */}
+              {/* 80 000 m² */}
             <div className="bg-slate-900 border border-slate-800 p-6 flex flex-col justify-between">
               <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-500 uppercase">Terület</p>
               <div>
-                <p className="text-4xl font-black text-white leading-none">30k<span className="text-orange-400">+</span></p>
+                <p className="text-4xl font-black text-white leading-none">80k<span className="text-orange-400">+</span></p>
                 <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">m² aszfalt</p>
               </div>
             </div>

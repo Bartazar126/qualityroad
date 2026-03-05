@@ -114,6 +114,6 @@ export const contactData = {
   phoneDisplay: "06/70-434-07-66",
   contacts: [
     { name: "Molnár Norbert", role: "Ügyvezető",       phone: "+36704340766", phoneDisplay: "06/70-434-07-66" },
-    { name: "Botos Lajos",    role: "Kapcsolattartó",   phone: "+36306906086", phoneDisplay: "06/30-690-60-86" },
+    { name: "Botos Lajos",    role: "Ügyvezető",         phone: "+36306906086", phoneDisplay: "06/30-690-60-86" },
   ],
 };

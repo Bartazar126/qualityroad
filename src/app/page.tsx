@@ -20,7 +20,7 @@ export const dynamic = "force-dynamic";
 
 const stats = [
   { value: "15+",  label: "év tapasztalat" },
-  { value: "50+",  label: "elvégzett projekt" },
+  { value: "120+", label: "elvégzett projekt" },
   { value: "2018", label: "alapítva" },
   { value: "100%", label: "minőségfókusz" },
 ];
@@ -32,7 +32,7 @@ const serviceDetails = [
   },
   {
     name: "Aszfaltozás — kézi és gépi",
-    desc: "Finisheres gépi bedolgozás 1–8 tonnás hengerrel vagy kézi kivitelezés kisebb felületeken. AC-11 minőségű aszfalt.",
+    desc: "Finisheres gépi bedolgozás 1–16 tonnás hengerrel vagy kézi kivitelezés kisebb felületeken. AC-11 minőségű aszfalt.",
   },
   {
     name: "Útfelújítás és burkolatjavítás",
@@ -55,8 +55,8 @@ const serviceDetails = [
 const serviceIcons = [HardHat, Layers, Wrench, Bike, Zap, Shovel];
 
 const equipment: { name: string; detail: string; Icon: React.ElementType }[] = [
-  { name: "Vögele finiszer", detail: "Gépi aszfaltterítő, pontos rétegvastagság", Icon: Gauge },
-  { name: "Hamm henger",     detail: "1–8 tonnás tömörítőhenger, ipari minőség",  Icon: Disc },
+  { name: "Vögele Finisher", detail: "Gépi aszfaltterítő, pontos rétegvastagság", Icon: Gauge },
+  { name: "Hamm henger",     detail: "1–16 tonnás tömörítőhenger, ipari minőség", Icon: Disc },
   { name: "CAT rakodó",      detail: "Anyagmozgatás, előkészítési munkálatok",     Icon: Package },
   { name: "Útmaró gép",      detail: "Meglévő burkolat eltávolítása, mart aszfalt", Icon: Scissors },
   { name: "Bulldózer",       detail: "Tereprendezés, alapréteg előkészítés",       Icon: Tractor },
