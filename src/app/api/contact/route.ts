@@ -27,18 +27,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": apiKey,
-      },
-      body: JSON.stringify({
-        sender:  { name: "Quality Road – Weboldal", email: senderEmail },
-        to:      [{ email: toEmail, name: "Quality Road Intact Kft" }],
-        replyTo: email?.trim() ? { email: email.trim(), name: name.trim() } : undefined,
-        subject: `Új ajánlatkérés: ${name.trim()}`,
-        htmlContent: `<!DOCTYPE html>
+    const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+    const cleanEmail   = email?.trim() ?? "";
+
+    const brevoBody: Record<string, unknown> = {
+      sender:      { name: "Quality Road – Weboldal", email: senderEmail },
+      to:          [{ email: toEmail, name: "Quality Road Intact Kft" }],
+      subject:     `Új ajánlatkérés: ${name.trim()}`,
+      htmlContent: `<!DOCTYPE html>
 <html lang="hu">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:0;background:#0f172a;font-family:'Helvetica Neue',Arial,sans-serif;">
@@ -159,13 +155,23 @@ export async function POST(request: Request) {
   </table>
 </body>
 </html>`,
-      }),
+    };
+
+    if (cleanEmail && isValidEmail(cleanEmail)) {
+      brevoBody.replyTo = { email: cleanEmail, name: name.trim() };
+    }
+
+    const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "api-key": apiKey },
+      body: JSON.stringify(brevoBody),
     });
 
     if (!brevoRes.ok) {
       const errBody = await brevoRes.text();
-      console.error("[contact] Brevo error:", errBody);
-      return NextResponse.json({ error: "E-mail küldési hiba. Kérjük hívjon minket telefonon." }, { status: 500 });
+      console.error("[contact] Brevo error:", brevoRes.status, errBody);
+      const detail = process.env.NODE_ENV === "development" ? ` (Brevo ${brevoRes.status}: ${errBody})` : "";
+      return NextResponse.json({ error: `E-mail küldési hiba. Kérjük hívjon minket telefonon.${detail}` }, { status: 500 });
     }
 
     return NextResponse.json({ ok: true });
