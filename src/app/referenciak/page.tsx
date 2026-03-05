@@ -244,7 +244,7 @@ export default async function ReferenciakPage() {
             <div className="bg-white p-6 flex flex-col justify-between">
               <p className="text-[10px] font-extrabold tracking-[0.2em] text-slate-400 uppercase">Vállalás</p>
               <div>
-                <p className="text-3xl font-black text-slate-900 leading-tight">100%<br />garanciális</p>
+                <p className="text-2xl font-black text-slate-900 leading-tight sm:text-3xl">100%<br />garanciális</p>
                 <p className="mt-1 text-xs text-slate-500 font-semibold uppercase tracking-widest">minden munka</p>
               </div>
             </div>

@@ -51,12 +51,12 @@ export function ShowcaseLightbox({ images, hideCaptions = false }: Props) {
             className="group relative overflow-hidden bg-slate-800 text-left">
             <div className="relative aspect-5/4">
               <Image
-                src={item.src}
+                src={item.src.replace("w_1920", "w_800")}
                 alt={item.alt || item.caption}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                loading={i < 6 ? "eager" : "lazy"}
-                priority={i < 3}
+                loading={i < 2 ? "eager" : "lazy"}
+                priority={i < 2}
                 className="object-cover opacity-90 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
               />
               {/* hover overlay */}

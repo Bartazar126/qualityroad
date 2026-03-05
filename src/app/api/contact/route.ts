@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 
 export async function POST(request: Request) {
   try {
@@ -16,27 +15,30 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Kötelező mezők hiányoznak." }, { status: 400 });
     }
 
-    const gmailUser = process.env.GMAIL_USER;
-    const gmailPass = process.env.GMAIL_APP_PASSWORD;
+    const apiKey      = process.env.BREVO_API_KEY;
+    const senderEmail = process.env.BREVO_SENDER_EMAIL ?? "qualityroadkft@gmail.com";
+    const toEmail     = process.env.CONTACT_TO_EMAIL   ?? "qualityroadkft@gmail.com";
 
-    if (!gmailUser || !gmailPass) {
-      console.error("[contact] GMAIL_USER vagy GMAIL_APP_PASSWORD nincs beállítva.");
+    if (!apiKey) {
+      console.error("[contact] BREVO_API_KEY nincs beállítva.");
       return NextResponse.json(
         { error: "Az e-mail küldés nincs konfigurálva. Kérjük hívjon minket telefonon." },
         { status: 500 },
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: gmailUser, pass: gmailPass },
-    });
-
-    await transporter.sendMail({
-      from: `"Quality Road – Weboldal" <${gmailUser}>`,
-      to: "dznswish41@gmail.com",
-      replyTo: email?.trim() || undefined,
-      subject: `Új ajánlatkérés: ${name.trim()}`,
+    const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": apiKey,
+      },
+      body: JSON.stringify({
+        sender:  { name: "Quality Road – Weboldal", email: senderEmail },
+        to:      [{ email: toEmail, name: "Quality Road Intact Kft" }],
+        replyTo: email?.trim() ? { email: email.trim(), name: name.trim() } : undefined,
+        subject: `Új ajánlatkérés: ${name.trim()}`,
+        htmlContent:
       html: `<!DOCTYPE html>
 <html lang="hu">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
@@ -158,7 +160,14 @@ export async function POST(request: Request) {
   </table>
 </body>
 </html>`,
+      }),
     });
+
+    if (!brevoRes.ok) {
+      const errBody = await brevoRes.text();
+      console.error("[contact] Brevo error:", errBody);
+      return NextResponse.json({ error: "E-mail küldési hiba. Kérjük hívjon minket telefonon." }, { status: 500 });
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
