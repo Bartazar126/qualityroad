@@ -15,8 +15,15 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://qualityroad.hu"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://qualityroadkft.hu"
   ),
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/icon.png",
+  },
   title: {
     template: "%s | Quality Road Intact Kft",
     default: "Quality Road Intact Kft – Útépítés, aszfaltozás, útfelújítás",
