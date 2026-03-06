@@ -18,13 +18,9 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://qualityroadkft.hu"
   ),
   icons: {
-    icon: [
-      { url: "/logo.png", type: "image/png" },
-      { url: "/logo.png", sizes: "32x32", type: "image/png" },
-      { url: "/logo.png", sizes: "192x192", type: "image/png" },
-    ],
-    apple: { url: "/logo.png", type: "image/png" },
+    icon: "/logo.png",
     shortcut: "/logo.png",
+    apple: "/logo.png",
   },
   title: {
     template: "%s | Quality Road Intact Kft",
@@ -81,6 +77,9 @@ export default function RootLayout({
   return (
     <html lang="hu">
       <head>
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="shortcut icon" type="image/png" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         {/* Google Consent Mode v2 — default: minden tiltva, amíg a user el nem fogad */}
         <script dangerouslySetInnerHTML={{ __html: `
           window.dataLayer = window.dataLayer || [];
