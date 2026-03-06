@@ -19,10 +19,12 @@ export const metadata: Metadata = {
   ),
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/icon.png", type: "image/png" },
+      { url: "/logo.png", type: "image/png" },
+      { url: "/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" },
     ],
-    apple: "/icon.png",
+    apple: { url: "/logo.png", type: "image/png" },
+    shortcut: "/logo.png",
   },
   title: {
     template: "%s | Quality Road Intact Kft",

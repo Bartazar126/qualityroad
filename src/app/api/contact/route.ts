@@ -143,7 +143,7 @@ export async function POST(request: Request) {
               <tr>
                 <td>
                   <p style="margin:0;font-size:11px;font-weight:900;color:#f97316;letter-spacing:0.12em;text-transform:uppercase;">Quality Road Intact Kft</p>
-                  <p style="margin:4px 0 0;font-size:11px;color:#475569;">Ez az üzenet a weboldalon keresztül érkezett — qualityroad.hu</p>
+                  <p style="margin:4px 0 0;font-size:11px;color:#475569;">Ez az üzenet a weboldalon keresztül érkezett — qualityroadkft.hu</p>
                 </td>
               </tr>
             </table>
