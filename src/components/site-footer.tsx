@@ -126,6 +126,10 @@ export function SiteFooter() {
               className="text-[10px] tracking-widest text-slate-600 uppercase transition hover:text-slate-400">
               Adatvédelmi nyilatkozat
             </Link>
+            <Link href="/aszf"
+              className="text-[10px] tracking-widest text-slate-600 uppercase transition hover:text-slate-400">
+              ÁSZF
+            </Link>
             <CookieSettingsButton />
           </div>
         </div>
